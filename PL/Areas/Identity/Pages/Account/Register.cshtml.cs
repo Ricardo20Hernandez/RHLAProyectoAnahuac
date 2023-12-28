@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -131,8 +133,40 @@ namespace PL.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //Preparacion de configuraciones de SMTP
+                    var smtpClient = new SmtpClient("smtp.gmail.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential("rhernandezv002@gmail.com", "aemiiymotkagdklg"),
+                        EnableSsl = true,
+                        UseDefaultCredentials = false
+                    };
+
+                    //Estructura del mensaje
+                    var mensaje = new MailMessage
+                    {
+                        From = new MailAddress("rhernandezv002@gmail.com"),
+                        Subject = "Confirmación de Correo",
+                        Body = "<h1 style='text-align:center; background-color:#0d5470; color:#ffffff;'>Buen día</h1><br/><br/><h3 style='text-align:justify; color:#000000'>El siguiente boton es para validar el correo" +
+                        " proporcionado en el registro, al validar el correo se te permitirá entrar correctamente al sistema con las credenciales creadas</h3><br/><br/><a style='background-color: #0d5470;color: white;padding: 15px 25px;text-decoration: none;' href=" + callbackUrl + ">Confirmar</a><br/><br/><br/>" +
+                        "<img src='https://www.anahuac.mx/mexico/sites/default/files/inline-images/logo.png' alt='MDN' width ='300px' height ='150px'/>",
+                        IsBodyHtml = true,
+                    };
+
+                    mensaje.To.Add(Input.Email); //Adjuntar correo al cual le llegará la confirmación.
+
+                    //Adjuntar archivos
+                    //string path = @"C:\Users\Alien 18\Documents\Humanos.jpg";
+
+                    //var attachment = new Attachment(path, MediaTypeNames.Image.Jpeg);
+
+                    //mensaje.Attachments.Add(attachment);
+
+                    smtpClient.Send(mensaje);
+
+                    await _emailSender.SendEmailAsync(Input.Email, "Confirma tu email",
+                        $"Hemos enviado un correo a la cuenta registrada para que la validez y puedas iniciar sesión" +
+                        $" <a href='https://www.google.com/intl/es-419/gmail/about/'>Ir a Gmail</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
