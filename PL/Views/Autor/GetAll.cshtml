@@ -1,0 +1,59 @@
+﻿@model ML.Autor
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div class="text-center m-2">
+    <h1>Usuarios</h1>
+    <hr />
+    <a class="btn btn-success" href="@Url.Action("Form", "Usuario")"> Agregar Usuario </a>
+</div>
+@if (Model.Autores != null && Model.Autores.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table" id="tablaUsuarios">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center">Editar</th>
+                    <th scope="col" class="text-center">Nombre Completo</th>
+                    <th scope="col" class="text-center">Fecha de nacimiento </th>
+                    <th scope="col" class="text-center">Foto </th>
+                    <th scope="col" class="text-center">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @foreach (ML.Autor usuario in Model.Autores)
+                {
+
+                    <tr class="align-middle">
+                        <td class="text-center">
+                            <a class="btn" href="@Url.Action("Form", "Usuario", new{idUsuario = usuario.IdAutor})">
+                                <i class="fa-solid fa-pen-to-square fa-lg" style="font-size: 1.7rem; color: #000000;"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">@usuario.Nombre @usuario.ApellidoPaterno @usuario.ApellidoMaterno</td>
+                        <td class="text-center">@usuario.FechaNacimiento</td>
+                        @if (usuario.Foto != null)
+                        {
+                            <td><img id="imgUsuario" src="data:image/jpeg;base64,@Convert.ToBase64String(usuario.Foto)" width="100" height="100" /></td>
+                        }
+                        else
+                        {
+                            <td><img src="~/Image/DefaultImage.jpg" id="imgUsuario" width="100" height="100" /></td>
+                        }
+                        <td class="text-center">
+                            <a class="btn" href="#">
+                                <i class="fa-solid fa-trash fa-xl" style="font-size: 1.7rem; color: #b70000;"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}
