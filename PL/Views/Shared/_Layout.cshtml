@@ -30,11 +30,59 @@
                         <li class="nav-item">
                             <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Autor" asp-action="GetAll">Autores</a>
+                            <a class="nav-link active" asp-area="" asp-controller="Autor" asp-action="GetAll">Autores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="" asp-controller="Rol" asp-action="GetAll">Roles</a>
                         </li>
                     </ul>
+                    @*  @if (signInMannager.IsSignedIn(User))
+                    {
+                    if (User.IsInRole("Administrador"))
+                    {
+                    <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                    <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link active" asp-area="" asp-controller="Autor" asp-action="GetAll">Autores</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link active" asp-area="" asp-controller="Rol" asp-action="GetAll">Roles</a>
+                    </li>
+                    </ul>
+                    }
+                    else
+                    {
+                    if (User.IsInRole("Usuario"))
+                    {
+                    <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                    <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                    </ul>
+                    }
+                    else
+                    {
+                    <br />
+                    <div class="alert alert-danger" role="alert">
+                    No tienes asignado un rol
+                    pide al administrador que te otorgue uno
+                    </div>
+                    }
+                    }
+                    }
+                    else
+                    {
+
+                    }    *@
                     <partial name="_LoginPartial" />
                 </div>
             </div>
