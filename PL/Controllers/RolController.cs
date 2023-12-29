@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PL.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    //[Authorize(Roles = "Administrador")]
     public class RolController : Controller
     {
         private RoleManager<IdentityRole> roleManager;
