@@ -1,0 +1,73 @@
+﻿@model ML.Editorial
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <h1 style="font-weight:bold">Lista de Editoriales</h1>
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <h5>Selecciona el boton verde para agregar una editorial, boton amarillo para modificarla o boton rojo para eliminarla.</h5>
+        </div>
+        <br />
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-1 ms-auto">
+            <a class="btn btn-success bi bi-building-add" asp-action="Form" asp-controller="Editorial"> Agregar</a>
+        </div>
+    </div>
+    <br />
+    <br />
+    @if (Model.Editoriales != null && Model.Editoriales.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover" id="myTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center">Editar</th>
+                            <th class="visually-hidden">IdEditorial</th>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Telefono</th>
+                            <th class="text-center">Email</th>
+                            <th class="visually-hidden">IdDireccion</th>
+                            <th class="text-center">Direccion</th>
+                            <th class="visually-hidden">IdColonia</th>
+                            <th class="text-center">Colonia</th>
+                            <th class="text-center">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(ML.Editorial editorial in Model.Editoriales)
+                        {
+                            <tr>
+                                <td class="text-center"><a class="btn btn-warning bi bi-pencil-fill" href="@Url.Action("Form","Editorial", new{IdEditorial = editorial.IdEditorial})"></a></td>
+                                <td class="visually-hidden">@editorial.IdEditorial</td>
+                                <td class="text-center">@editorial.Nombre</td>
+                                <td class="text-center">@editorial.Telefono</td>
+                                <td class="text-center">@editorial.Email</td>
+                                <td class="visually-hidden">@editorial.Direccion.IdDireccion</td>
+                                <td class="text-center">@editorial.Direccion.Calle N°.Int: @editorial.Direccion.NumeroInterior N°.Ext: @editorial.Direccion.NumeroExterior</td>
+                                <td class="visually-hidden">@editorial.Direccion.Colonia.IdColonia</td>
+                                <td class="text-center">@editorial.Direccion.Colonia.Nombre</td>
+                                <td class="text-center"><a class="btn btn-danger bi bi-recycle" href="@Url.Action("Delete","Editorial", new{IdEditorial = editorial.IdEditorial})"></a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">@ViewBag.Mensaje</div>
+    }
+</div>
+
