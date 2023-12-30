@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace BL
@@ -41,6 +42,191 @@ namespace BL
                         }
                         result.Correct = true;
                     }
+                }
+            }
+            catch (Exception e)
+            {
+                result.Correct = false;
+                result.ErrorMessage = e.InnerException.Message;
+                result.Ex = e;
+            }
+
+            return result;
+        }
+
+        public static ML.Result GetById(int IdAutor)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
+                {
+                    var query = (from autor in context.Autors
+
+                                 where autor.IdAutor == IdAutor
+
+                                 select new
+                                 {
+                                     IdAutor = autor.IdAutor,
+                                     Nombre = autor.Nombre,
+                                     ApellidoPaterno = autor.ApellidoPaterno,
+                                     ApellidoMaterno = autor.ApellidoMaterno,
+                                     FechaNacimiento = autor.FechaNacimiento,
+                                     Foto = autor.Foto
+                                 }).FirstOrDefault();
+
+                    if (query != null)
+                    {
+                        result.Objects = new List<object>();
+
+                        ML.Autor usuario = new ML.Autor();
+                        usuario.IdAutor = query.IdAutor;
+                        usuario.Nombre = query.Nombre;
+                        usuario.ApellidoPaterno = query.ApellidoPaterno;
+                        usuario.ApellidoMaterno = query.ApellidoMaterno;
+                        usuario.FechaNacimiento = query.FechaNacimiento.ToString();
+                        usuario.Foto = query.Foto;
+
+                        result.Object = usuario;
+
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                result.Correct = false;
+                result.ErrorMessage = e.InnerException.Message;
+                result.Ex = e;
+            }
+
+            return result;
+        }
+        public static ML.Result Add(ML.Autor autor)
+        {
+
+
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
+                {
+                    //var query = context.Database.ExecuteSqlRawAsync($"AddAutor '{autor.Nombre}','{autor.ApellidoPaterno}','{autor.ApellidoMaterno}','{autor.FechaNacimiento}','{autor.Foto}'");
+                    DL.Autor autorLQ = new DL.Autor();
+                    autorLQ.Nombre = autor.Nombre;
+                    autorLQ.ApellidoPaterno = autor.ApellidoPaterno;
+                    autorLQ.ApellidoMaterno = autor.ApellidoMaterno;
+                    autorLQ.FechaNacimiento = DateTime.Parse(autor.FechaNacimiento);
+                    autorLQ.Foto = autor.Foto;
+
+
+
+
+
+                    context.Autors.Add(autorLQ);
+                    int RowsAffected = context.SaveChanges();
+
+                    //int query = context.UsuarioAdd(usuario.UserName, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Email, usuario.Password, usuario.Sexo, usuario.Telefono, usuario.Celular, usuario.FechaNacimiento, usuario.CURP, usuario.Rol.IdRol, usuario.Nombre);
+
+                    //cmd.Parameters.AddWithValue("@ID", usuario.ID);
+                    // manda el procedure  y la conexion 
+
+
+                    if (RowsAffected > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                result.Correct = false;
+                result.ErrorMessage = e.InnerException.Message;
+                result.Ex = e;
+            }
+
+            return result;
+        }
+
+        public static ML.Result Update(ML.Autor autor)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
+                {
+                    //var query = context.Database.ExecuteSqlRaw($"UpdateAutor '{autor.IdAutor}','{autor.Nombre}','{autor.ApellidoPaterno}','{autor.ApellidoMaterno}','{autor.FechaNacimiento}','{autor.Foto}'");
+                    var usuarioLINQ = (from queryLINQ in context.Autors
+                                       where queryLINQ.IdAutor == autor.IdAutor
+                                       select queryLINQ).SingleOrDefault();
+
+                    if (usuarioLINQ != null)
+                    {
+                        //DL_EF.Usuario  = new DL_EF.Usuario();
+                        //usuarioLINQ.IdUsuario = usuario.IdUsuario;
+                        usuarioLINQ.IdAutor = autor.IdAutor;
+                        usuarioLINQ.ApellidoMaterno = autor.ApellidoMaterno;
+                        usuarioLINQ.ApellidoPaterno = autor.ApellidoPaterno;
+                        usuarioLINQ.Foto = autor.Foto;
+
+                        usuarioLINQ.FechaNacimiento = DateTime.Parse(autor.FechaNacimiento);
+
+
+                        usuarioLINQ.Nombre = autor.Nombre;
+
+                        //context.Usuario.Update(usuarioLINQ);
+                        int RowsAffected = context.SaveChanges();
+
+                        //int query = context.UsuarioAdd(usuario.UserName, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Email, usuario.Password, usuario.Sexo, usuario.Telefono, usuario.Celular, usuario.FechaNacimiento, usuario.CURP, usuario.Rol.IdRol, usuario.Nombre);
+
+                        //cmd.Parameters.AddWithValue("@ID", usuario.ID);
+                        // manda el procedure  y la conexion 
+                        if (RowsAffected > 0)
+                        //if (query > 0)
+                        {
+                            result.Correct = true;
+                        }
+                        else
+                        {
+                            result.Correct = false;
+                        }
+
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                result.Correct = false;
+                result.ErrorMessage = e.InnerException.Message;
+                result.Ex = e;
+            }
+
+            return result;
+        }
+
+        public static ML.Result Delete(int IdAutor)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
+                {
+                    var query = context.Database.ExecuteSqlRaw($"DeleteAutor '{IdAutor}'");
+
+                    if (query > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                    }
+
                 }
             }
             catch (Exception e)
@@ -123,7 +309,7 @@ namespace BL
         //    return result;
         //}
         ///*
-        
+
 
     }
 }
