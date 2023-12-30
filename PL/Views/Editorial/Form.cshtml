@@ -1,0 +1,228 @@
+﻿@model ML.Editorial
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <h1 style="font:bold">@ViewBag.Accion</h1>
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <h3 style="font:bold">Llena la información solicitada para la editorial</h3>
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <h6>Datos de la Editorial</h6>
+            <br />
+        </div>
+    </div>
+    @using (Html.BeginForm("Form", "Editorial", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-md">
+                @Html.LabelFor(model => model.IdEditorial, new {@class = "visually-hidden"})
+                @Html.TextBoxFor(model => model.IdEditorial, new {@class = "visually-hidden"})
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                @Html.LabelFor(model => model.Nombre);
+                @Html.TextBoxFor(model => model.Nombre, new {@class = "form-control"})
+            </div>
+            <div class="col-md">
+                @Html.LabelFor(model => model.Telefono);
+                @Html.TextBoxFor(model => model.Telefono, new {@class = "form-control"})
+            </div>
+            <div class="col-md">
+                @Html.LabelFor(model => model.Email);
+                @Html.TextBoxFor(model => model.Email, new {@class = "form-control"})
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md">
+                <h6>Direccion</h6>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Direccion.IdDireccion, new { @class = "visually-hidden" })
+                @Html.TextBoxFor(model => model.Direccion.IdDireccion, new { @class = "visually-hidden" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Direccion.Colonia.Municipio.Estado.Pais)
+                @if (Model.Direccion.Colonia.Municipio.Estado.Pais.Paises != null)
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.Estado.Pais.IdPais, new SelectList(Model.Direccion.Colonia.Municipio.Estado.Pais.Paises, "IdPais", "Nombre"), "Selecciona un pais", new { @class = "form-control", @id = "ddlPais" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.Estado.Pais.IdPais, new SelectList(string.Empty, "IdPais", "Nombre"), "Selecciona un pais", htmlAttributes: new { @class = "form-control", @id = "ddlPais" })
+                }
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Direccion.Colonia.Municipio.Estado)
+                @if (Model.Direccion.Colonia.Municipio.Estado.Estados != null)
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.Estado.IdEstado, new SelectList(Model.Direccion.Colonia.Municipio.Estado.Estados, "IdEstado", "Nombre"), "Selecciona un estado", new { @class = "form-control", @id = "ddlEstado" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.Estado.IdEstado, new SelectList(string.Empty, "IdEstado", "Nombre"), "Selecciona un estado", htmlAttributes: new { @class = "form-control", @id = "ddlEstado" })
+                }
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Direccion.Colonia.Municipio)
+                @if (Model.Direccion.Colonia.Municipio.Municipios != null)
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.IdMunicipio, new SelectList(Model.Direccion.Colonia.Municipio.Municipios, "IdMunicipio", "Nombre"), "Selecciona un municipio", new { @class = "form-control", @id = "ddlMunicipio" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.IdMunicipio, new SelectList(string.Empty, "IdMunicipio", "Nombre"), "Selecciona un municipio", htmlAttributes: new { @class = "form-control", @id = "ddlMunicipio" })
+                }
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Direccion.Colonia)
+                @if (Model.Direccion.Colonia.Colonias != null)
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.IdColonia, new SelectList(Model.Direccion.Colonia.Colonias, "IdColonia", "Nombre"), "Selecciona una colonia", new { @class = "form-control", @id = "ddlColonia" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.IdColonia, new SelectList(string.Empty, "IdColonia", "Nombre"), "Selecciona una colonia", htmlAttributes: new { @class = "form-control", @id = "ddlColonia" })
+                }
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Direccion.Calle)
+                @Html.TextBoxFor(model => model.Direccion.Calle, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Direccion.NumeroInterior)
+                @Html.TextBoxFor(model => model.Direccion.NumeroInterior, new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Direccion.NumeroExterior)
+                @Html.TextBoxFor(model => model.Direccion.NumeroExterior, new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col">
+                <input type="submit" value="@ViewBag.Accion" class="btn btn-success">
+                @Html.ActionLink("Regresar","GetAll","Editorial", htmlAttributes: new{ @class="btn btn-danger"})
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () { //listener
+            //selector en jQuery
+
+            //eventos onchange
+            $("#ddlPais").change(function () {
+
+                $("#ddlEstado").empty();
+                $("#ddlMunicipio").empty();
+                $("#ddlColonia").empty();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("EstadoGetByIdPais")',
+                    dataType: 'json',
+                    data: { IdPais: $("#ddlPais").val() },
+                    success: function (estados) {
+                        $("#ddlEstado").append('<option value="0">' + 'Seleccione un estado' + '</option>');
+                        $.each(estados, function (i, estados) {
+                            $("#ddlEstado").append('<option value="'
+                                + estados.idEstado + '">'
+                                + estados.nombre + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed.' + ex);
+                    }
+                });
+            });
+        });
+
+
+        $(document).ready(function () { //listener
+            //selector en jQuery
+
+            //eventos onchange
+            $("#ddlEstado").change(function () {
+
+                $("#ddlMunicipio").empty();
+                $("#ddlColonia").empty();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("MunicipioGetByIdEstado")',
+                    dataType: 'json',
+                    data: { IdEstado: $("#ddlEstado").val() },
+                    success: function (municipios) {
+                        $("#ddlMunicipio").append('<option value="0">' + 'Seleccione un municipio' + '</option>');
+                        $.each(municipios, function (i, municipios) {
+                            $("#ddlMunicipio").append('<option value="'
+                                + municipios.idMunicipio + '">'
+                                + municipios.nombre + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed.' + ex);
+                    }
+                });
+            });
+        });
+
+
+        $(document).ready(function () { //listener
+            //selector en jQuery
+
+            //eventos onchange
+            $("#ddlMunicipio").change(function () {
+
+                $("#ddlColonia").empty();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ColoniaGetByIdMunicipio")',
+                    dataType: 'json',
+                    data: { IdMunicipio: $("#ddlMunicipio").val() },
+                    success: function (colonias) {
+                        $("#ddlColonia").append('<option value="0">' + 'Seleccione una colonia' + '</option>');
+                        $.each(colonias, function (i, colonias) {
+                            $("#ddlColonia").append('<option value="'
+                                + colonias.idColonia + '">'
+                                + colonias.nombre + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed.' + ex);
+                    }
+                });
+            });
+        });
+
+    </script>
+}
