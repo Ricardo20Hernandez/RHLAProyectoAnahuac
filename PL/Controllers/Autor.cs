@@ -28,14 +28,12 @@ namespace PL.Controllers
         public ActionResult Form(int? IdAutor)
         {
 
-            
-
             //ML.Producto producto = new ML.Producto();
             ML.Autor autor = new ML.Autor();
 
             if (IdAutor.HasValue)
             {
-                ViewBag.Accion = "actualizar";
+                ViewBag.Accion = "Actualizar";
                 ML.Result result = new ML.Result();
                 result = BL.Autor.GetById(IdAutor.Value);
                 autor = (ML.Autor)result.Object;
@@ -49,15 +47,10 @@ namespace PL.Controllers
         [HttpPost]
         public IActionResult Form(ML.Autor autor, IFormFile Foto)
         {
-
             if (Foto != null)
             {
                 autor.Foto = convertFileToByteArray(Foto);
             }
-
-
-
-
             if (autor.IdAutor == 0)
             {
                 ML.Result result = new ML.Result();
@@ -76,8 +69,6 @@ namespace PL.Controllers
                 if (result.Correct)
                 {
                       ViewBag.Message = "Autor actualizado correctamente";
-
-
 
                     return PartialView("Modal");
                 }
@@ -98,7 +89,6 @@ namespace PL.Controllers
 
             Array.Copy(resultInBytes, buffer, resultInBytes.Length);
 
-
             return buffer;
 
 
@@ -114,7 +104,6 @@ namespace PL.Controllers
         }
 
         public IActionResult Delete(int IdAutor)
-
         {
             ML.Result result = new ML.Result();
             result = BL.Autor.Delete(IdAutor);
@@ -123,8 +112,5 @@ namespace PL.Controllers
             return PartialView("Modal");
 
         }
-
-
-
     }
 }

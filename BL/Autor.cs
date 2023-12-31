@@ -34,7 +34,7 @@ namespace BL
                             usuario.Nombre = user.Nombre;
                             usuario.ApellidoPaterno = user.ApellidoPaterno;
                             usuario.ApellidoMaterno = user.ApellidoMaterno;
-                            usuario.FechaNacimiento = user.FechaNacimiento.ToString();
+                            usuario.FechaNacimiento = user.FechaNacimiento.ToString("dd/MM/yyyy");
                             usuario.Foto = user.Foto;
 
                             result.Objects.Add(usuario);
@@ -84,7 +84,7 @@ namespace BL
                         usuario.Nombre = query.Nombre;
                         usuario.ApellidoPaterno = query.ApellidoPaterno;
                         usuario.ApellidoMaterno = query.ApellidoMaterno;
-                        usuario.FechaNacimiento = query.FechaNacimiento.ToString();
+                        usuario.FechaNacimiento = query.FechaNacimiento.ToString("dd/MM/yyyy");
                         usuario.Foto = query.Foto;
 
                         result.Object = usuario;
@@ -227,6 +227,45 @@ namespace BL
                         result.Correct = false;
                     }
 
+                }
+            }
+            catch (Exception e)
+            {
+                result.Correct = false;
+                result.ErrorMessage = e.InnerException.Message;
+                result.Ex = e;
+            }
+
+            return result;
+        }
+
+        public static ML.Result GetAllDropDownList()
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
+                {
+                    var query = (from autor in context.Autors
+                                 select new
+                                 {
+                                     IdAutor = autor.IdAutor,
+                                     Nombre = $"{autor.Nombre} {autor.ApellidoPaterno} {autor.ApellidoMaterno}"
+                                 }).ToList();
+
+                    if (query.Count > 0)
+                    {
+                        result.Objects = new List<object>();
+                        foreach (var user in query)
+                        {
+                            ML.Autor usuario = new ML.Autor();
+                            usuario.IdAutor = user.IdAutor;
+                            usuario.Nombre = user.Nombre;
+
+                            result.Objects.Add(usuario);
+                        }
+                        result.Correct = true;
+                    }
                 }
             }
             catch (Exception e)

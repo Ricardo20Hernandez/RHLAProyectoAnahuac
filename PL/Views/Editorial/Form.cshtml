@@ -7,20 +7,22 @@
 <div class="container">
     <div class="row">
         <div class="col-md">
-            <h1 style="font:bold">@ViewBag.Accion</h1>
+            <h1 style="font:bold">Editorial</h1>
+            <br />
+            <h2>@ViewBag.Accion</h2>
             <br />
         </div>
     </div>
     <div class="row">
         <div class="col-md">
-            <h3 style="font:bold">Llena la información solicitada para la editorial</h3>
+            <h4 style="font:bold">Ingresa la información solicitada para la editorial</h4>
             <br />
         </div>
     </div>
     <div class="row">
         <div class="col-md">
-            <h6>Datos de la Editorial</h6>
-            <br />
+            <h5>Datos de la Editorial</h5>
+            <hr />
         </div>
     </div>
     @using (Html.BeginForm("Form", "Editorial", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -46,12 +48,13 @@
             </div>
         </div>
         <br />
+        <br />
         <div class="row">
             <div class="col-md">
-                <h6>Direccion</h6>
+                <h5>Direccion</h5>
+                <hr />
             </div>
         </div>
-        <br />
         <div class="row">
             <div class="col-md-6">
                 @Html.LabelFor(model => model.Direccion.IdDireccion, new { @class = "visually-hidden" })

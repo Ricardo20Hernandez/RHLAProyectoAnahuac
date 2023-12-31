@@ -1,0 +1,129 @@
+﻿@model ML.Medio
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <h1 style="font:bold">Medio</h1>
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <h3>@ViewBag.Accion</h3>
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <h5>Ingresa la información solicitada sobre el Medio</h5>
+            <br />
+            <br />
+        </div>
+    </div>
+    @using (Html.BeginForm("Form","Medio",FormMethod.Post,new{ enctype = "multipart/form-data"}))
+    {
+        <div class="row">
+            <div class="col-md">
+                @Html.LabelFor(model => model.IdMedio, new{ @class = "visually-hidden"})
+                @Html.TextBoxFor(model => model.IdMedio, new{ @class = "visually-hidden"})
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                @Html.LabelFor(model => model.Titulo)
+                @Html.TextBoxFor(model => model.Titulo, new{ @class = "form-control"})
+            </div>
+            <div class="col-md">
+                @Html.LabelFor(model => model.NumeroPaginas)
+                @Html.TextBoxFor(model => model.NumeroPaginas, new{ @class = "form-control"})
+            </div>
+            <div class="col-md">
+                @Html.LabelFor(model => model.Duracion)
+                @Html.TextBoxFor(model => model.Duracion, new { @class = "form-control"})
+            </div>
+            <div class="col-md">
+                @Html.LabelFor(model => model.CantidadDisponible)
+                @Html.TextBoxFor(model => model.CantidadDisponible, new{ @class = "form-control"})
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md">
+                @Html.LabelFor(model => model.Imagen)
+                <br />
+                <input type="file" id="fuImagen" name="fuImagen" onchange="PreviewImagen(event)"/>
+                @if(Model.Imagen == null)
+                {
+                    <img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" style="height:100px; width:100px;"/>
+                }
+                else
+                {
+                    <img id="imgMedio" src="data:image/png;base64,@Convert.ToBase64String(Model.Imagen)" style="width:100px; height:100px"/>
+                }
+                @Html.HiddenFor(model => model.Imagen)
+            </div>
+            <div class="col-md">
+                @Html.LabelFor(model => model.TipoMedio)
+                @if(Model.TipoMedio.TipoMedios != null)
+                {
+                    @Html.DropDownListFor(model => model.TipoMedio.IdTipoMedio, new SelectList(Model.TipoMedio.TipoMedios, "IdTipoMedio", "Nombre"), "Selecciona un TipoMedio", new {@class = "form-control"})
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.TipoMedio.IdTipoMedio, new SelectList(string.Empty,"IdTipoMedio","Nombre"),"Seleccione un TipoMedio", htmlAttributes: new {@class = "form-control"})
+                }
+            </div>
+            <div class="col-md">
+                @Html.LabelFor(model => model.Editorial)
+                @if(Model.Editorial.Editoriales != null)
+                {
+                    @Html.DropDownListFor(model => model.Editorial.IdEditorial, new SelectList(Model.Editorial.Editoriales, "IdEditorial","Nombre"), "Seleccione una Editorial", new {@class = "form-control"} )
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Editorial.IdEditorial, new SelectList(string.Empty,"IdEditorial","Nombre"), "Seleccione una Editorial", htmlAttributes: new{@class = "form-control"})
+                }
+            </div>
+            <div class="col-md">
+                @Html.LabelFor(model => model.Idioma)
+                @if (Model.Idioma.Idiomas != null)
+                {
+                    @Html.DropDownListFor(model => model.Idioma.IdIdioma, new SelectList(Model.Idioma.Idiomas, "IdIdioma", "Nombre"), "Selecciona un Idioma", new {@class = "form-control"})
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Idioma.IdIdioma, new SelectList(string.Empty,"IdIdioma", "Nombre"),"Seleccione un Idioma", htmlAttributes: new {@class = "form-control"})
+                }
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Autor)
+                @if (Model.Autor.Autores != null)
+                {
+                    @Html.DropDownListFor(model => model.Autor.IdAutor, new SelectList(Model.Autor.Autores, "IdAutor", "Nombre"), "Selecciona un Autor", new {@class = "form-control"})
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Autor.IdAutor, new SelectList(string.Empty,"IdAutor", "Nombre"),"Seleccione un Autor", htmlAttributes: new {@class = "form-control"})
+                }
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md">
+                <input type="submit" class = "btn btn-success" value="Agregar"/>
+                <a class="btn btn-danger" asp-action="GetAll" asp-controller="Medio">Regresar</a>
+            </div>
+        </div>
+    }
+</div>
+
