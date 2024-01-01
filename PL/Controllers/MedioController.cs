@@ -66,5 +66,68 @@ namespace PL.Controllers
             }
             return View(medio);
         }
+
+
+        [HttpPost]
+        public IActionResult Form(ML.Medio medio, IFormFile fuImagen)
+        {
+            if (fuImagen != null)
+            {
+                medio.Imagen = convertFileToByteArray(fuImagen);
+              
+            }
+
+            if(medio.IdMedio == 0)
+            {
+                ML.Result result = BL.Medio.Add(medio);
+                if (result.Correct)
+                {
+                    ViewBag.Mensaje = "Medio añadido correctamente";
+                }
+                else
+                {
+                    ViewBag.Mensaje = "Error al añadir el medio";
+                }
+            }
+            else
+            {
+                //ML.Result result = BL.Medio.Update(medio);
+                //if (result.Correct)
+                //{
+                //    ViewBag.Mensaje = "Medio actualizado correctamente";
+                //}
+                //else
+                //{
+                //    ViewBag.Mensaje = "Error al actualizar el medio";
+                //}
+            }
+            return View("Modal");
+
+        }
+
+        public IActionResult Delete(int IdMedio)
+        {
+            //ML.Result result = BL.Medio.Delete(IdMedio); 
+
+            //if (result.Correct)
+            //{
+            //    ViewBag.Mensaje = "Medio eliminado correctamente";
+            //}
+            //else
+            //{
+            //    ViewBag.Mensaje = "Error al eliminar el medio";
+            //}
+            return View("Modal");
+        }
+
+        public byte[] convertFileToByteArray(IFormFile fuImagen)
+        {
+            MemoryStream target = new MemoryStream();
+            fuImagen.OpenReadStream().CopyTo(target);
+            byte[] data = target.ToArray();
+            return data;
+        }
+
+
     }
 }

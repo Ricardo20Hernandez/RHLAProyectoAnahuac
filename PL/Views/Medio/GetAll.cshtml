@@ -47,7 +47,7 @@
                         @foreach(ML.Medio medio in Model.Medios)
                         {
                             <tr>
-                                <td class="text-center"></td>
+                                <td class="text-center"><a class="btn btn-warning bi bi-pencil" href="@Url.Action("Form","Medio", new {IdMedio = medio.IdMedio})"></a></td>
                                 <td class="visually-hidden">@medio.IdMedio</td>
                                 <td class="text-center">@medio.Titulo</td>
                                 <td class="text-center">@medio.NumeroPaginas</td>
@@ -65,12 +65,13 @@
                                 </td>
                                 <td class="visually-hidden">@medio.TipoMedio.IdTipoMedio</td>
                                 <td class="text-center">@medio.TipoMedio.Nombre</td>
-                                 <td class="visually-hidden">@medio.Editorial.IdEditorial</td>
+                                <td class="visually-hidden">@medio.Editorial.IdEditorial</td>
                                 <td class="text-center">@medio.Editorial.Nombre</td>
                                 <td class="visually-hidden">@medio.Idioma.IdIdioma</td>
                                 <td class="text-center">@medio.Idioma.Nombre</td>
                                 <td class="visually-hidden">@medio.Autor.IdAutor</td>
                                 <td class="text-center">@medio.Autor.Nombre</td>
+                                <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>
                             </tr>
                         }
                     </tbody>

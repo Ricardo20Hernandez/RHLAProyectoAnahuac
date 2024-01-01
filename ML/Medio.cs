@@ -11,7 +11,7 @@ namespace ML
         public int IdMedio { get; set; }
         public string Titulo { get; set; }
         public int? NumeroPaginas { get; set; }
-        public string Duracion { get; set; }
+        public TimeSpan? Duracion { get; set; }
         public int? CantidadDisponible { get; set; }
         public byte[] Imagen { get; set; }
         public List<object> Medios { get; set; }

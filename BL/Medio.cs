@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -58,8 +62,8 @@ namespace BL
 
                             medio.IdMedio = medios.IdMedio;
                             medio.Titulo = medios.Titulo;
-                            medio.NumeroPaginas = (medios.NumeroPaginas == null) ? 0 : medios.NumeroPaginas.Value;
-                            medio.Duracion = (medios.Duracion == null) ? "No aplica" : medios.Duracion.Value.ToString("HH:mm:ss");
+                            medio.NumeroPaginas = (medios.NumeroPaginas == null) ? null : medios.NumeroPaginas.Value;
+                            medio.Duracion = (medios.Duracion == null) ? null : medios.Duracion.Value;
                             medio.CantidadDisponible = medios.CantidadDisponible;
                             medio.Imagen = medios.Imagen;
 
@@ -140,8 +144,8 @@ namespace BL
 
                         medio.IdMedio = medios.IdMedio;
                         medio.Titulo = medios.Titulo;
-                        medio.NumeroPaginas = medios.NumeroPaginas.Value;
-                        medio.Duracion = (medios.Duracion == null) ? "" : medios.Duracion.Value.ToString("HH:mm:ss");
+                        medio.NumeroPaginas = (medios.NumeroPaginas == null) ? null : medios.NumeroPaginas.Value;
+                        medio.Duracion = (medios.Duracion == null) ? null : medios.Duracion.Value;
                         medio.CantidadDisponible = medios.CantidadDisponible;
                         medio.Imagen = medios.Imagen;
 
@@ -170,6 +174,51 @@ namespace BL
                 result.ErrorMessage = "Error al hacer la consulta en la BD" + result.Ex;
                 //throw;
                 //throw;
+            }
+            return result;
+        }
+
+
+        public static ML.Result Add(ML.Medio medio)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
+                {
+                    DL.Medio media = new DL.Medio();
+
+                    media.Titulo = medio.Titulo;
+                    media.NumeroPaginas = medio.NumeroPaginas;
+                    media.Duracion = medio.Duracion;
+                    media.CantidadDisponible = medio.CantidadDisponible.Value;
+                    media.Imagen = medio.Imagen;
+                    media.IdTipoMedio = medio.TipoMedio.IdTipoMedio;
+                    media.IdEditorial = medio.Editorial.IdEditorial;
+                    media.IdIdioma = medio.Idioma.IdIdioma;
+                    media.IdAutor = medio.Autor.IdAutor;
+
+                    context.Medios.Add(media);
+                    int RowsAffected = context.SaveChanges();
+
+                    if (RowsAffected > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "Hubo un error al agregar el medio";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.Ex = ex;
+                result.ErrorMessage = "Problemas al hacer la inserción a la BD" + result.Ex;
+                throw;
             }
             return result;
         }
