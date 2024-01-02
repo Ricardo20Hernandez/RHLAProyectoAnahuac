@@ -29,7 +29,7 @@
                         <th scope="col" class="text-center">Nombre Completo</th>
                         <th scope="col" class="text-center">Fecha de nacimiento </th>
                         <th scope="col" class="text-center">Foto </th>
-                        <th scope="col" class="text-center">Eliminar</th>
+                        @* <th scope="col" class="text-center">Eliminar</th> *@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
@@ -53,9 +53,9 @@
                             {
                                 <td><img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgUsuario" width="100" height="100" /></td>
                             }
-                            <td>
+                            @* <td>
                                 <a class="btn btn-danger bi bi-trash" href="@Url.Action("Delete", "Autor", new { IdAutor= usuario.IdAutor})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a>
-                            </td>
+                            </td> *@
                             @* <td class="text-center">
                     <a class="btn" href="@Url.Action("Delete", "Autor", new{IdAutor = usuario.IdAutor})">
                     <i class="fa-solid fa-trash fa-xl" style="font-size: 1.7rem; color: #b70000;">Eliminar</i>

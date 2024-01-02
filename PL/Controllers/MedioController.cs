@@ -91,15 +91,15 @@ namespace PL.Controllers
             }
             else
             {
-                //ML.Result result = BL.Medio.Update(medio);
-                //if (result.Correct)
-                //{
-                //    ViewBag.Mensaje = "Medio actualizado correctamente";
-                //}
-                //else
-                //{
-                //    ViewBag.Mensaje = "Error al actualizar el medio";
-                //}
+                ML.Result result = BL.Medio.Update(medio);
+                if (result.Correct)
+                {
+                    ViewBag.Mensaje = "Medio actualizado correctamente";
+                }
+                else
+                {
+                    ViewBag.Mensaje = "Error al actualizar el medio";
+                }
             }
             return View("Modal");
 
@@ -107,16 +107,16 @@ namespace PL.Controllers
 
         public IActionResult Delete(int IdMedio)
         {
-            //ML.Result result = BL.Medio.Delete(IdMedio); 
+            ML.Result result = BL.Medio.Delete(IdMedio);
 
-            //if (result.Correct)
-            //{
-            //    ViewBag.Mensaje = "Medio eliminado correctamente";
-            //}
-            //else
-            //{
-            //    ViewBag.Mensaje = "Error al eliminar el medio";
-            //}
+            if (result.Correct)
+            {
+                ViewBag.Mensaje = "Medio eliminado correctamente";
+            }
+            else
+            {
+                ViewBag.Mensaje = "Error al eliminar el medio";
+            }
             return View("Modal");
         }
 

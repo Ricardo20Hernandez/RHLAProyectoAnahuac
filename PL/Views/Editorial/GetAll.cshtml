@@ -41,7 +41,7 @@
                             <th class="text-center">Direccion</th>
                             <th class="visually-hidden">IdColonia</th>
                             <th class="text-center">Colonia</th>
-                            <th class="text-center">Eliminar</th>
+                            @* <th class="text-center">Eliminar</th> *@
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +57,7 @@
                                 <td class="text-center">@editorial.Direccion.Calle N°.Int: @editorial.Direccion.NumeroInterior N°.Ext: @editorial.Direccion.NumeroExterior</td>
                                 <td class="visually-hidden">@editorial.Direccion.Colonia.IdColonia</td>
                                 <td class="text-center">@editorial.Direccion.Colonia.Nombre</td>
-                                <td class="text-center"><a class="btn btn-danger bi bi-recycle" href="@Url.Action("Delete","Editorial", new{IdEditorial = editorial.IdEditorial})" onclick="return confirm('¿Estas seguro de eliminar la editorial?');"></a></td>
+                                @* <td class="text-center"><a class="btn btn-danger bi bi-recycle" href="@Url.Action("Delete","Editorial", new{IdEditorial = editorial.IdEditorial})" onclick="return confirm('¿Estas seguro de eliminar la editorial?');"></a></td> *@
                             </tr>
                         }
                     </tbody>

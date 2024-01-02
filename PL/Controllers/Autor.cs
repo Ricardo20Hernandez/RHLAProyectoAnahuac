@@ -103,14 +103,14 @@ namespace PL.Controllers
             }
         }
 
-        public IActionResult Delete(int IdAutor)
-        {
-            ML.Result result = new ML.Result();
-            result = BL.Autor.Delete(IdAutor);
-            if (result.Correct) { }
-            ViewBag.Message = "Autor borrado correctamente";
-            return PartialView("Modal");
+        //public IActionResult Delete(int IdAutor)
+        //{
+        //    ML.Result result = new ML.Result();
+        //    result = BL.Autor.Delete(IdAutor);
+        //    if (result.Correct) { }
+        //    ViewBag.Message = "Autor borrado correctamente";
+        //    return PartialView("Modal");
 
-        }
+        //}
     }
 }

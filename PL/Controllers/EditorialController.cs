@@ -104,20 +104,20 @@ namespace PL.Controllers
             return View("Modal");
         }
 
-        public IActionResult Delete (int IdEditorial)
-        {
-            ML.Result result = BL.Editorial.Delete(IdEditorial);
+        //public IActionResult Delete (int IdEditorial)
+        //{
+        //    ML.Result result = BL.Editorial.Delete(IdEditorial);
 
-            if (result.Correct)
-            {
-                ViewBag.Mensaje = "Se ha eliminado correctamente la editorial";
-            }
-            else
-            {
-                ViewBag.Mensaje = "No se eliminado correctamente la editorial";
-            }
-            return View("Modal");
-        }
+        //    if (result.Correct)
+        //    {
+        //        ViewBag.Mensaje = "Se ha eliminado correctamente la editorial";
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Mensaje = "No se eliminado correctamente la editorial";
+        //    }
+        //    return View("Modal");
+        //}
 
 
         public JsonResult EstadoGetByIdPais(int IdPais)

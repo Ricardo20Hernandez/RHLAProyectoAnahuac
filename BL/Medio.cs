@@ -222,5 +222,84 @@ namespace BL
             }
             return result;
         }
+
+        public static ML.Result Update(ML.Medio medio)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using(DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
+                {
+                    var query = (from medios in context.Medios
+                                 where medios.IdMedio == medio.IdMedio
+                                 select medios).SingleOrDefault();
+
+                    if (query != null) {
+
+                        query.Titulo = medio.Titulo;
+                        query.NumeroPaginas = medio.NumeroPaginas;
+                        query.Duracion = medio.Duracion;
+                        query.CantidadDisponible = medio.CantidadDisponible.Value;
+                        query.Imagen = medio.Imagen;
+                        query.IdTipoMedio = medio.TipoMedio.IdTipoMedio;
+                        query.IdEditorial = medio.Editorial.IdEditorial;
+                        query.IdIdioma = medio.Idioma.IdIdioma;
+                        query.IdAutor = medio.Autor.IdAutor;
+
+                        int RowsAffected = context.SaveChanges();
+
+                        if(RowsAffected > 0)
+                        {
+                            result.Correct = true;
+                        }
+                        else
+                        {
+                            result.Correct = false;
+                            result.ErrorMessage = "Hubo error al actulizar al actualizar el medio";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.Ex = ex;
+                result.ErrorMessage = "Problemas al hacer la inserción a la BD" + result.Ex;
+                //throw;
+            }
+
+            return result;
+        }
+
+        public static ML.Result Delete(int IdMedio)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
+                {
+                    var query = context.Database.ExecuteSqlRaw($"DeleteMedio '{IdMedio}'");
+
+                    if (query > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "Error al eliminar el medio";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.Ex = ex;
+                result.ErrorMessage = "Problemas al hacer la eliminación" + result.Ex;
+                //throw;
+            }
+            return result;
+        }
     }
 }
