@@ -74,7 +74,7 @@ namespace PL.Controllers
         public IActionResult Form(ML.Editorial editorial)
         {
 
-            if(editorial.IdEditorial == 0)
+            if(editorial.IdEditorial == null)
             {
                 ML.Result result = BL.Editorial.Add(editorial);
                 if (result.Correct)
