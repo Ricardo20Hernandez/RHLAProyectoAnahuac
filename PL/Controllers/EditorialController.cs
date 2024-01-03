@@ -8,26 +8,6 @@ namespace PL.Controllers
         {
             ML.Editorial editorial = new ML.Editorial();
 
-            ML.Result result = BL.Editorial.GetAll();
-
-            if (result.Correct)
-            {
-                editorial.Editoriales = result.Objects;
-
-            }
-            else
-            {
-                ViewBag.Mensaje = "No hay editoriales aún registradas";
-            }
-
-            return View(editorial);
-        }
-
-        [HttpGet]
-        public IActionResult Form(int? IdEditorial)
-        {
-            ML.Editorial editorial = new ML.Editorial();
-
             editorial.Direccion = new ML.Direccion();
             editorial.Direccion.Colonia = new ML.Colonia();
             editorial.Direccion.Colonia.Municipio = new ML.Municipio();
@@ -37,38 +17,106 @@ namespace PL.Controllers
             ML.Result resultPaises = BL.Pais.GetAll();
             editorial.Direccion.Colonia.Municipio.Estado.Pais.Paises = resultPaises.Objects;
 
-            if (IdEditorial == null)
+            //ML.Result result = BL.Editorial.GetAll();
+
+            //if (result.Correct)
+            //{
+            //    editorial.Editoriales = result.Objects;
+
+            //}
+            //else
+            //{
+            //    ViewBag.Mensaje = "No hay editoriales aún registradas";
+            //}
+
+            return View(editorial);
+        }
+
+        //Simulacion de servicio
+        public IActionResult EditorialGetAll()
+        {
+            ML.Result result = BL.Editorial.GetAll();
+
+            if (result.Correct)
             {
-                ViewBag.Accion = "Agregar";
+                return Ok(result);
             }
             else
             {
-                ML.Result result = BL.Editorial.GetById(IdEditorial.Value);
-
-                if (result.Correct)
-                {
-                    //Inicializar variables de navegacion
-                    editorial.Direccion = new ML.Direccion();
-                    editorial.Direccion.Colonia = new ML.Colonia();
-                    editorial.Direccion.Colonia.Municipio = new ML.Municipio();
-                    editorial.Direccion.Colonia.Municipio.Estado = new ML.Estado();
-                    editorial.Direccion.Colonia.Municipio.Estado.Pais = new ML.Pais();
-
-                    editorial = (ML.Editorial)result.Object; //Unboxing
-
-                    ML.Result resultEstados = BL.Estado.GetByIdPais(editorial.Direccion.Colonia.Municipio.Estado.Pais.IdPais);
-                    ML.Result resultMunicipios = BL.Municipio.GetByIdEstado(editorial.Direccion.Colonia.Municipio.Estado.IdEstado);
-                    ML.Result resultColonias = BL.Colonia.GetByIdMunicipio(editorial.Direccion.Colonia.Municipio.IdMunicipio);
-
-                    editorial.Direccion.Colonia.Municipio.Estado.Pais.Paises = resultPaises.Objects;
-                    editorial.Direccion.Colonia.Municipio.Estado.Estados = resultEstados.Objects;
-                    editorial.Direccion.Colonia.Municipio.Municipios = resultMunicipios.Objects;
-                    editorial.Direccion.Colonia.Colonias = resultColonias.Objects;
-                }
-                ViewBag.Accion = "Actualizar";
+                return BadRequest(result);
             }
-            return View(editorial);
         }
+
+        public IActionResult PaisGetAll()
+        {
+            ML.Result result = BL.Pais.GetAll();
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        public JsonResult GetById(int IdEditorial)
+        {
+            ML.Result result = BL.Editorial.GetById(IdEditorial);
+            ML.Editorial editorial = new ML.Editorial();
+
+            editorial = (ML.Editorial)result.Object; //Unboxing
+            return Json(result);
+
+        }
+
+        //[HttpGet]
+        //public IActionResult Form(int? IdEditorial)
+        //{
+        //    ML.Editorial editorial = new ML.Editorial();
+
+        //    editorial.Direccion = new ML.Direccion();
+        //    editorial.Direccion.Colonia = new ML.Colonia();
+        //    editorial.Direccion.Colonia.Municipio = new ML.Municipio();
+        //    editorial.Direccion.Colonia.Municipio.Estado = new ML.Estado();
+        //    editorial.Direccion.Colonia.Municipio.Estado.Pais = new ML.Pais();
+
+        //    ML.Result resultPaises = BL.Pais.GetAll();
+        //    editorial.Direccion.Colonia.Municipio.Estado.Pais.Paises = resultPaises.Objects;
+
+        //    if (IdEditorial == null)
+        //    {
+        //        ViewBag.Accion = "Agregar";
+        //    }
+        //    else
+        //    {
+        //        ML.Result result = BL.Editorial.GetById(IdEditorial.Value);
+
+        //        if (result.Correct)
+        //        {
+        //            //Inicializar variables de navegacion
+        //            editorial.Direccion = new ML.Direccion();
+        //            editorial.Direccion.Colonia = new ML.Colonia();
+        //            editorial.Direccion.Colonia.Municipio = new ML.Municipio();
+        //            editorial.Direccion.Colonia.Municipio.Estado = new ML.Estado();
+        //            editorial.Direccion.Colonia.Municipio.Estado.Pais = new ML.Pais();
+
+        //            editorial = (ML.Editorial)result.Object; //Unboxing
+
+        //            ML.Result resultEstados = BL.Estado.GetByIdPais(editorial.Direccion.Colonia.Municipio.Estado.Pais.IdPais);
+        //            ML.Result resultMunicipios = BL.Municipio.GetByIdEstado(editorial.Direccion.Colonia.Municipio.Estado.IdEstado);
+        //            ML.Result resultColonias = BL.Colonia.GetByIdMunicipio(editorial.Direccion.Colonia.Municipio.IdMunicipio);
+
+        //            editorial.Direccion.Colonia.Municipio.Estado.Pais.Paises = resultPaises.Objects;
+        //            editorial.Direccion.Colonia.Municipio.Estado.Estados = resultEstados.Objects;
+        //            editorial.Direccion.Colonia.Municipio.Municipios = resultMunicipios.Objects;
+        //            editorial.Direccion.Colonia.Colonias = resultColonias.Objects;
+        //        }
+        //        ViewBag.Accion = "Actualizar";
+        //    }
+        //    return View(editorial);
+        //}
 
         [HttpPost]
         public IActionResult Form(ML.Editorial editorial)
@@ -81,10 +129,12 @@ namespace PL.Controllers
                 {
                     //Enviamos datos del controlador hacia la vista
                     ViewBag.Mensaje = "Se ha ingresado correctamente la editorial";
+                    return Json(result);
                 }
                 else
                 {
                     ViewBag.Mensaje = "No se ha ingresado correctamente la editorial" + result.ErrorMessage;
+                    return Json(result);
                 }
             }
             else
@@ -94,14 +144,14 @@ namespace PL.Controllers
                 if (result.Correct)
                 {
                     ViewBag.Mensaje = "Se ha actualizado correctamente la editorial";
+                    return Json(result);
                 }
                 else
                 {
                     ViewBag.Mensaje = "No se ha actualizado correctamente la editorial" + result.ErrorMessage;
+                    return Json(result);
                 }
             }
-
-            return View("Modal");
         }
 
         //public IActionResult Delete (int IdEditorial)

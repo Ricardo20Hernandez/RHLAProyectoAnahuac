@@ -116,16 +116,15 @@
                         <br />
                         <div class="row">
                             <div class="col-md-12">
-                                    @if (Model.Foto == null)
-                                    {
-                                        <img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgActor" style="width:100px; height:100px;" />
-                                    }
-                                    else
-                                    {
-                                        <img id="imgActor" src="data:image/png;base64,@Convert.ToBase64String(Model.Foto)" style="width:100px; height:100px;" />
-                                    }
-                                    @Html.HiddenFor(model => model.Foto)
-                                
+                                @if (Model.Foto == null)
+                                {
+                                    <img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgActor" style="width:100px; height:100px;" />
+                                }
+                                else
+                                {
+                                    <img id="imgActor" src="data:image/png;base64,@Convert.ToBase64String(Model.Foto)" style="width:100px; height:100px;" />
+                                }
+                                @Html.HiddenFor(model => model.Foto)
                             </div>
                         </div>
                     </div>
@@ -236,19 +235,19 @@
         });
     };
 
-
-    function ShowModal(){
+    function ShowModal() {
         $("#txtIdAutor").val("");
         $("#txtNombre").val("");
         $("#txtApellidoPaterno").val("");
         $('#txtApellidoMaterno').val("");
         $('#txtFechaNacimiento').val("");
-        $('#fuImagen').empty();
-        $('#imgAutor').attr('src', 'https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg');
+        UpdateImage('https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg');
+        var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
+        $('#fuImagen').replaceWith(newInput);
         $('#modal').modal('show');
     };
 
-    
+
     function Guardar() {
 
         var datos = new FormData(document.getElementById('FormularioAutor'));
@@ -263,7 +262,7 @@
             success: function (result) {
                 // $('#myModal').modal('show');
                 $('#modal').modal('hide');
-                alert('Autor ingresado correctamente.');
+                alert('Preceso realizado con exito.');
                 GetAll();
             },
             error: function (result) {
@@ -274,6 +273,9 @@
     };
 
     function Update(idAutor) {
+
+        var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
+        $('#fuImagen').replaceWith(newInput);
 
         $.ajax({
             type: 'GET',
@@ -289,19 +291,12 @@
                 $('#txtApellidoMaterno').val(result.object.apellidoMaterno)
                 $('#txtFechaNacimiento').val(result.object.fechaNacimiento)
 
-                $('#cargarFoto').empty();
-
-                var imagen;
-
-
                 if (result.object.foto == null) {
-                    imagen = '<img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgAutor" width = "150px" height = "150px"/>'
+                    UpdateImage('https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg');
+                } else {
+                    var imageUrl = 'data:image/png;base64,' + result.object.foto;
+                    UpdateImage(imageUrl);
                 }
-                else {
-                    imagen = '<img src="data:image/png;base64,' + result.object.foto + '" id="imgAutor" width = "100px" height = "100px"/>'
-                }
-
-                $('#cargarFoto').append(imagen);
 
                 $('#modal').modal('show');
             },
@@ -311,5 +306,11 @@
 
         });
     }
+
+    function UpdateImage(imageUrl) {
+        // Reemplaza la imagen por la nueva URL proporcionada
+        $('#imgActor').attr('src', imageUrl);
+    }
+
 
 </script>
