@@ -14,15 +14,16 @@
     </div>
     <div class="row">
         <div class="col-md-2 ms-auto">
-            <a class="btn btn-success" href="@Url.Action("Form", "Autor")">Agregar Autor</a>
+            <button type="button" class="btn btn-success bi bi-person-plus-fill" id="btnAbrirAgregar" onclick="ShowModal()">Agregar</button>
         </div>
     </div>
     <br>
     <br />
-    @if (Model.Autores != null && Model.Autores.Count > 0)
-    {
-        <div class="table-responsive">
-            <table class="table" id="tablaUsuarios">
+    @*     @if (Model.Autores != null && Model.Autores.Count > 0)
+    { *@
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-responsive" id="tblAutores">
                 <thead>
                     <tr>
                         <th scope="col" class="text-center">Editar</th>
@@ -32,44 +33,286 @@
                         @* <th scope="col" class="text-center">Eliminar</th> *@
                     </tr>
                 </thead>
-                <tbody class="table-group-divider">
-                    @foreach (ML.Autor usuario in Model.Autores)
+                <tbody>
+                    @* @foreach (ML.Autor usuario in Model.Autores)
                     {
 
-                        <tr class="align-middle">
-                            <td class="text-center">
-                                <a class="btn btn-info bi bi-pencil" href="@Url.Action("Form", "Autor", new { IdAutor= usuario.IdAutor})"></a>
-                                @* <a class="btn" href="@Url.Action("Form", "Autor", new{IdAutor = usuario.IdAutor})">
-                        <i class="fa-solid fa-pen-to-square fa-lg" style="font-size: 1.7rem; color: #000000;">Editar</i>
-                        </a>*@
-                            </td>
-                            <td class="text-center">@usuario.Nombre @usuario.ApellidoPaterno @usuario.ApellidoMaterno</td>
-                            <td class="text-center">@usuario.FechaNacimiento</td>
-                            @if (usuario.Foto != null)
-                            {
-                                <td><img id="imgUsuario" src="data:image/jpeg;base64,@Convert.ToBase64String(usuario.Foto)" width="100" height="100" /></td>
-                            }
-                            else
-                            {
-                                <td><img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgUsuario" width="100" height="100" /></td>
-                            }
-                            @* <td>
-                                <a class="btn btn-danger bi bi-trash" href="@Url.Action("Delete", "Autor", new { IdAutor= usuario.IdAutor})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a>
-                            </td> *@
-                            @* <td class="text-center">
-                    <a class="btn" href="@Url.Action("Delete", "Autor", new{IdAutor = usuario.IdAutor})">
-                    <i class="fa-solid fa-trash fa-xl" style="font-size: 1.7rem; color: #b70000;">Eliminar</i>
-                    </a>
-                    </td>*@
-
-                        </tr>
+                    <tr class="align-middle">
+                    <td class="text-center">
+                    <a class="btn btn-info bi bi-pencil" href="@Url.Action("Form", "Autor", new { IdAutor= usuario.IdAutor})"></a>
+                    </td>
+                    <td class="text-center">@usuario.Nombre @usuario.ApellidoPaterno @usuario.ApellidoMaterno</td>
+                    <td class="text-center">@usuario.FechaNacimiento</td>
+                    @if (usuario.Foto != null)
+                    {
+                    <td><img id="imgUsuario" src="data:image/jpeg;base64,@Convert.ToBase64String(usuario.Foto)" width="100" height="100" /></td>
                     }
+                    else
+                    {
+                    <td><img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgUsuario" width="100" height="100" /></td>
+                    }
+                    </tr>
+                    } *@
                 </tbody>
             </table>
         </div>
-    }
+    </div>
+    @*     }
     else
     {
-        <div class="alert alert-danger" role="alert">No hay autores registrados</div>
+    <div class="alert alert-danger" role="alert">No hay autores registrados</div>
+    } *@
+</div>
+
+<div class="container">
+    @using (Html.BeginForm("Form", "Autor", FormMethod.Post, new { enctype = "multipart/form-data", @id = "FormularioAutor" }))
+    {
+        <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Autor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.IdAutor, null, new { @style = "display: none;" })
+                                @Html.TextBoxFor(model => model.IdAutor, new { @style = "display: none;", @id = "txtIdAutor" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.Nombre)
+                                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.ApellidoPaterno)
+                                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @id = "txtApellidoPaterno" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.ApellidoMaterno)
+                                @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control", @id = "txtApellidoMaterno" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md">
+                                @Html.LabelFor(model => model.FechaNacimiento)
+                                @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control", @id = "txtFechaNacimiento"})
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.Foto)
+                                <input type="file" id="fuImagen" name="fuImagen" class="form-control" onchange="PreviewImagen(event)" />
+
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                
+                                    @if (Model.Foto == null)
+                                    {
+                                        <img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgActor" style="width:100px; height:100px;" />
+                                    }
+                                    else
+                                    {
+                                        <img id="imgActor" src="data:image/png;base64,@Convert.ToBase64String(Model.Foto)" style="width:100px; height:100px;" />
+                                    }
+                                    @Html.HiddenFor(model => model.Foto)
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success" id="btnGuardar" onclick="Guardar()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Detalle</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>
+                                Accion efectuada correctamente
+                            </h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#txtFechaNacimiento").datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1910:2023',
+                maxDate: new Date()
+            });
+        });
+
+        function PreviewImagen(event) {
+            var output = document.getElementById('imgActor');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src)
+            }
+        }
+    </script>
+
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        GetAll();
+    });
+
+    function GetAll() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("AutorGetAll")',
+            success: function (result) {
+                $('#tblAutores tbody').empty();
+
+                $.each(result.objects, function (i, autor) {
+                    var imagen;
+                    if (autor.foto != null) {
+                        imagen = '<img id="imgUsuario" src = "data:image/png;base64,' + autor.foto + '"width = "100" height = "100" />'
+                    }
+                    else {
+                        imagen = '<img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id = "imgUsuario" width = "100" height = "100" />'
+                    }
+                    var filas =
+                        '<tr>'
+                        + '<td class="text-center"> '
+                        + '<a class="btn btn-warning bi bi-pencil-fill" href="#" onclick="Update(' + autor.idAutor + ')">'
+                        + '</a> '
+                        + '</td>'
+                        + "<td id='id' class='text-center'>" + autor.nombre + ' ' + autor.apellidoPaterno + ' ' + autor.apellidoMaterno + "</td>"
+                        + "<td class='text-center'>" + autor.fechaNacimiento + "</td>"
+                        + "<td class = 'text-center'>" + imagen + "</td>"
+                        + "</tr>";
+                    $("#tblAutores tbody").append(filas);
+                });
+            },
+            error: function (result) {
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
+            }
+        });
+    };
+
+
+    function ShowModal() fddsdsd
+        $("#txtIdAutor").val("");jjkkkk
+        $("#txtNombre").val("");gg
+        $("#txtApellidoPaterno").val("");
+        $('#txtApellidoMaterno').val("");
+        $('#txtFechaNacimiento').val("");
+        $('#fuImagen').enty
+        $('#imgAutor').attr('src', 'https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg');
+        $('#modal').modal('show');
+    };
+
+    f
+    function Guardar() {
+
+        var datos = new FormData(document.getElementById('FormularioAutor'));
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Form")',
+            data: datos,
+            processData: false,
+            contentType: false,
+            datatýpe: 'json',
+            success: function (result) {
+                // $('#myModal').modal('show');
+                $('#modal').modal('hide');
+                alert('Autor ingresado correctamente.');
+                GetAll();
+            },
+            error: function (result) {
+                alert('Error en inserción.' + result.responseJSON.ErrorMessage);
+            }
+
+        });
+    };
+
+    function Update(idAutor) {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetById")',
+            data: { IdAutor: idAutor },
+            dataType: 'json',
+
+            success: function (result) {
+
+                $('#txtIdAutor').val(result.object.idAutor)
+                $('#txtNombre').val(result.object.nombre)
+                $('#txtApellidoPaterno').val(result.object.apellidoPaterno)
+                $('#txtApellidoMaterno').val(result.object.apellidoMaterno)
+                $('#txtFechaNacimiento').val(result.object.fechaNacimiento)
+
+                $('#cargarFoto').empty();
+
+                var imagen;
+
+
+                if (result.object.foto == null) {
+                    imagen = '<img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgAutor" width = "150px" height = "150px"/>'
+                }
+                else {
+                    imagen = '<img src="data:image/png;base64,' + result.object.foto + '" id="imgAutor" width = "100px" height = "100px"/>'
+                }
+
+                $('#cargarFoto').append(imagen);
+
+                $('#modal').modal('show');
+            },
+            error: function (result) {
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
+            }
+
+        });
+    }
+
+
+
+</script>
