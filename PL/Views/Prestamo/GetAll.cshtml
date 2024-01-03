@@ -1,0 +1,88 @@
+﻿@model ML.Medio
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <h1 style="font:bolder">Medios</h1>
+            <br />
+        </div>
+    </div>
+  @*  <div class="row">
+        <div class="col-md-1 ms-auto">
+            <a class="btn btn-success" asp-action="Form" asp-controller="Medio">Agregar</a>
+            <br />
+        </div>
+    </div>*@
+    <br />
+    @if (Model.Medios != null && Model.Medios.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-responsive table-bordered" id="myTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center">Obtener en Prestamo</th>
+                            <th class="visually-hidden">IdMedio</th>
+                            <th class="text-center">Titulo</th>
+                            <th class="text-center">Paginas</th>
+                            <th class="text-center">Duracion</th>
+                            <th class="text-center">CantidadDisponible</th>
+                            <th class="text-center">Portada</th>
+                            <th class="visually-hidden">IdTipoMedio</th>
+                            <th class="text-center">Medio</th>
+                            <th class="visually-hidden">IdEditorial</th>
+                            <th class="text-center">Editorial</th>
+                            <th class="visually-hidden">IdIdioma</th>
+                            <th class="text-center">Idioma</th>
+                            <th class="visually-hidden">IdAutor</th>
+                            <th class="text-center">Autor</th>
+                            @*<th class="text-center">Eliminar</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(ML.Medio medio in Model.Medios)
+                        {
+                            <tr>
+                                <td class="text-center"><a class="btn btn-warning bi bi-pencil" href="@Url.Action("SacarEnPrestamo","Prestamo", new {IdMedio = medio.IdMedio})"></a></td>
+                                <td class="visually-hidden">@medio.IdMedio</td>
+                                <td class="text-center">@medio.Titulo</td>
+                                <td class="text-center">@medio.NumeroPaginas</td>
+                                <td class="text-center">@medio.Duracion</td>
+                                <td class="text-center">@medio.CantidadDisponible</td>
+                                <td class="text-center">
+                                    @if(medio.Imagen == null)
+                                    {
+                                        <img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" style="height:100px; width:100px" />
+                                    }
+                                    else
+                                    {
+                                        <img id="imgMedio" src="data:img/png;base64,@Convert.ToBase64String(medio.Imagen)" style="height:100px; width:100px;" />       
+                                    }
+                                </td>
+                                <td class="visually-hidden">@medio.TipoMedio.IdTipoMedio</td>
+                                <td class="text-center">@medio.TipoMedio.Nombre</td>
+                                <td class="visually-hidden">@medio.Editorial.IdEditorial</td>
+                                <td class="text-center">@medio.Editorial.Nombre</td>
+                                <td class="visually-hidden">@medio.Idioma.IdIdioma</td>
+                                <td class="text-center">@medio.Idioma.Nombre</td>
+                                <td class="visually-hidden">@medio.Autor.IdAutor</td>
+                                <td class="text-center">@medio.Autor.Nombre</td>
+                                @* <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">@ViewBag.Mensaje</div>
+    }
+</div>
+
