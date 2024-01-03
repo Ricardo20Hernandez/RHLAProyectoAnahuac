@@ -116,7 +116,6 @@
                         <br />
                         <div class="row">
                             <div class="col-md-12">
-                                
                                     @if (Model.Foto == null)
                                     {
                                         <img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgActor" style="width:100px; height:100px;" />
@@ -238,18 +237,18 @@
     };
 
 
-    function ShowModal() fddsdsd
-        $("#txtIdAutor").val("");jjkkkk
-        $("#txtNombre").val("");gg
+    function ShowModal(){
+        $("#txtIdAutor").val("");
+        $("#txtNombre").val("");
         $("#txtApellidoPaterno").val("");
         $('#txtApellidoMaterno').val("");
         $('#txtFechaNacimiento').val("");
-        $('#fuImagen').enty
+        $('#fuImagen').empty();
         $('#imgAutor').attr('src', 'https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg');
         $('#modal').modal('show');
     };
 
-    f
+    
     function Guardar() {
 
         var datos = new FormData(document.getElementById('FormularioAutor'));
@@ -312,7 +311,5 @@
 
         });
     }
-
-
 
 </script>
