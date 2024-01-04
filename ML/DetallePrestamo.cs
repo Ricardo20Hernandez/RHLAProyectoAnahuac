@@ -9,7 +9,7 @@ namespace ML
     public class DetallePrestamo
     {
 
-        public int MyProperty { get; set; }
+        public int IdDetallePrestamo { get; set; }
 
 
         public bool Entregado { get; set; }
@@ -19,9 +19,10 @@ namespace ML
 
       
 
-        public ML.Prestamo Prestamo { get; set; }   
+        public ML.Prestamo Prestamo { get; set; }
 
-       
+        public List<object> DetallePrestamos { get; set; }
+
 
     }
 }

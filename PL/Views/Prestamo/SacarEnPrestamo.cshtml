@@ -1,5 +1,78 @@
 ﻿@model ML.DetallePrestamo
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-<td class="visually-hidden"></td>
-<td class="text-center">@Model.Prestamo.Medio.Titulo</td>
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <h1 style="font:bolder">Medios prestados</h1>
+            <br />
+        </div>
+    </div>
+     <div class="row">
+    <div class="col-md-1 ms-auto">
+    <a class="btn btn-success" asp-action="GetAll" asp-controller="Prestamo">Regresar</a>
+    <br />
+    </div>
+    </div>
+    <br />
+    @if (Model.DetallePrestamos != null && Model.DetallePrestamos.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-responsive table-bordered" id="myTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center">Regresar</th>
+                            <th class="visually-hidden">IdMedio</th>
+                            <th class="text-center">Titulo</th>
+                         
+                            <th class="text-center">Portada</th>
+                            <th class="visually-hidden">IdTipoMedio</th>
+                            <th class="text-center">Medio</th>
+                            
+                            <th class="visually-hidden">IdAutor</th>
+                            <th class="text-center">Autor</th>
+                            @*<th class="text-center">Eliminar</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ML.DetallePrestamo detallePrestamo in Model.DetallePrestamos)
+                        {
+                            <tr>
+                                <td class="text-center"><a class="btn btn-success bi bi-pencil" href="@Url.Action("Devolver","Prestamo", new {IdMedio = detallePrestamo.Prestamo.Medio.IdMedio})"></a></td>
+                                <td class="visually-hidden">@detallePrestamo.Prestamo.IdPrestamo</td>
+                                <td class="text-center">@detallePrestamo.Prestamo.Medio.Titulo</td>
+                                
+                                <td class="text-center">
+                                    @if (@detallePrestamo.Prestamo.Medio.Imagen == null)
+                                    {
+                                        <img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" style="height:100px; width:100px" />
+                                    }
+                                    else
+                                    {
+                                        <img id="imgMedio" src="data:img/png;base64,@Convert.ToBase64String(@detallePrestamo.Prestamo.Medio.Imagen)" style="height:100px; width:100px;" />
+                                    }
+                                </td>
+                                <td class="visually-hidden">@detallePrestamo.Prestamo.Medio.TipoMedio.IdTipoMedio</td>
+                                <td class="text-center">@detallePrestamo.Prestamo.Medio.TipoMedio.Nombre</td>
+                                
+                                <td class="visually-hidden">@detallePrestamo.Prestamo.Medio.Autor.IdAutor</td>
+                                <td class="text-center">@detallePrestamo.Prestamo.Medio.Autor.Nombre</td>
+                                @* <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">@ViewBag.Mensaje</div>
+    }
+</div>
 
