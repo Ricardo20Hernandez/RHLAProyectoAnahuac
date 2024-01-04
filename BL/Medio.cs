@@ -195,7 +195,7 @@ namespace BL
                     media.CantidadDisponible = medio.CantidadDisponible.Value;
                     media.Imagen = medio.Imagen;
                     media.IdTipoMedio = medio.TipoMedio.IdTipoMedio;
-                    media.IdEditorial = medio.Editorial.IdEditorial;
+                    media.IdEditorial = (medio.Editorial.IdEditorial == 0)?null:medio.Editorial.IdEditorial;
                     media.IdIdioma = medio.Idioma.IdIdioma;
                     media.IdAutor = medio.Autor.IdAutor;
 

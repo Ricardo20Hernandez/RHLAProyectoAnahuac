@@ -12,17 +12,17 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-1 ms-auto">
-            <a class="btn btn-success" asp-action="Form" asp-controller="Medio">Agregar</a>
+        <div class="col-md-2 ms-auto">
+            <button type="button" class="btn btn-success bi bi-plus-circle-fill" id="btnAbrir" onclick="ShowModal()"> Agregar</button>
             <br />
         </div>
     </div>
     <br />
-    @if (Model.Medios != null && Model.Medios.Count > 0)
-    {
+@*     @if (Model.Medios != null && Model.Medios.Count > 0)
+    { *@
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-responsive table-bordered" id="myTable">
+                <table class="table table-responsive table-bordered" id="tblMedios">
                     <thead class="table-light">
                         <tr>
                             <th class="text-center">Eliminar</th>
@@ -44,45 +44,383 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach(ML.Medio medio in Model.Medios)
-                        {
-                            <tr>
-                                <td class="text-center"><a class="btn btn-warning bi bi-pencil" href="@Url.Action("Form","Medio", new {IdMedio = medio.IdMedio})"></a></td>
-                                <td class="visually-hidden">@medio.IdMedio</td>
-                                <td class="text-center">@medio.Titulo</td>
-                                <td class="text-center">@medio.NumeroPaginas</td>
-                                <td class="text-center">@medio.Duracion</td>
-                                <td class="text-center">@medio.CantidadDisponible</td>
-                                <td class="text-center">
-                                    @if(medio.Imagen == null)
-                                    {
-                                        <img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" style="height:100px; width:100px" />
-                                    }
-                                    else
-                                    {
-                                        <img id="imgMedio" src="data:img/png;base64,@Convert.ToBase64String(medio.Imagen)" style="height:100px; width:100px;" />       
-                                    }
-                                </td>
-                                <td class="visually-hidden">@medio.TipoMedio.IdTipoMedio</td>
-                                <td class="text-center">@medio.TipoMedio.Nombre</td>
-                                <td class="visually-hidden">@medio.Editorial.IdEditorial</td>
-                                <td class="text-center">@medio.Editorial.Nombre</td>
-                                <td class="visually-hidden">@medio.Idioma.IdIdioma</td>
-                                <td class="text-center">@medio.Idioma.Nombre</td>
-                                <td class="visually-hidden">@medio.Autor.IdAutor</td>
-                                <td class="text-center">@medio.Autor.Nombre</td>
-                                <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>
-                            </tr>
-                        }
+                        @*  @foreach (ML.Medio medio in Model.Medios)
+                    {
+                    <tr>
+                    <td class="text-center"><a class="btn btn-warning bi bi-pencil" href="@Url.Action("Form","Medio", new {IdMedio = medio.IdMedio})"></a></td>
+                    <td class="visually-hidden">@medio.IdMedio</td>
+                    <td class="text-center">@medio.Titulo</td>
+                    <td class="text-center">@medio.NumeroPaginas</td>
+                    <td class="text-center">@medio.Duracion</td>
+                    <td class="text-center">@medio.CantidadDisponible</td>
+                    <td class="text-center">
+                    @if (medio.Imagen == null)
+                    {
+                    <img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" style="height:100px; width:100px" />
+                    }
+                    else
+                    {
+                    <img id="imgMedio" src="data:img/png;base64,@Convert.ToBase64String(medio.Imagen)" style="height:100px; width:100px;" />
+                    }
+                    </td>
+                    <td class="visually-hidden">@medio.TipoMedio.IdTipoMedio</td>
+                    <td class="text-center">@medio.TipoMedio.Nombre</td>
+                    <td class="visually-hidden">@medio.Editorial.IdEditorial</td>
+                    <td class="text-center">@medio.Editorial.Nombre</td>
+                    <td class="visually-hidden">@medio.Idioma.IdIdioma</td>
+                    <td class="text-center">@medio.Idioma.Nombre</td>
+                    <td class="visually-hidden">@medio.Autor.IdAutor</td>
+                    <td class="text-center">@medio.Autor.Nombre</td>
+                    <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>
+                    </tr>
+                    } *@
                     </tbody>
                 </table>
             </div>
         </div>
-
-    }
+@*     }
     else
     {
         <div class="alert alert-danger" role="alert">@ViewBag.Mensaje</div>
+    } *@
+</div>
+
+<div class="container">
+    @using(Html.BeginForm("Form","Medio", FormMethod.Post, new { enctype = "multipart/form-data", @id = "FormularioMedio" }))
+    {
+        <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Medio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.IdMedio, new{ @style="display:none;" })
+                                @Html.TextBoxFor(model => model.IdMedio, new{ @style="display:none;", @id="txtIdMedio"})
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md">
+                                @Html.LabelFor(model => model.Titulo)
+                                @Html.TextBoxFor(model => model.Titulo, new{ @class = "form-control", @id="txtTitulo"})
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.NumeroPaginas)
+                                @Html.TextBoxFor(model => model.NumeroPaginas, new{ @class = "form-control", @id = "txtNumeroPaginas"})
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.Duracion)
+                                @Html.TextBoxFor(model => model.Duracion, new { @class = "form-control", @id="txtDuracion"})
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.CantidadDisponible)
+                                @Html.TextBoxFor(model => model.CantidadDisponible, new{ @class = "form-control", @id="txtCantidadDisponible"})
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.Imagen)
+                                <input type="file" id="fuImagen" name="fuImagen" class="form-control" onchange="PreviewImagen(event)" />
+
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                @if (Model.Imagen == null)
+                                {
+                                    <img src="https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg" id="imgMedio" style="width:100px; height:100px;" />
+                                }
+                                else
+                                {
+                                    <img id="imgMedio" src="data:image/png;base64,@Convert.ToBase64String(Model.Imagen)" style="width:100px; height:100px;" />
+                                }
+                                @Html.HiddenFor(model => model.Imagen)
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.TipoMedio)
+                                @if (Model.TipoMedio.TipoMedios != null)
+                                {
+                                    @Html.DropDownListFor(model => model.TipoMedio.IdTipoMedio, new SelectList(Model.TipoMedio.TipoMedios, "IdTipoMedio", "Nombre"), "Selecciona un TipoMedio", new {@class = "form-control", @id="ddlTipoMedio"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.TipoMedio.IdTipoMedio, new SelectList(string.Empty,"IdTipoMedio","Nombre"),"Seleccione un TipoMedio", htmlAttributes: new {@class = "form-control", @id="ddlTipoMedio"})
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.Editorial)
+                                @if (Model.Editorial.Editoriales != null)
+                                {
+                                    @Html.DropDownListFor(model => model.Editorial.IdEditorial, new SelectList(Model.Editorial.Editoriales, "IdEditorial","Nombre"), "Seleccione una Editorial", new {@class = "form-control", @id="ddlEditorial"} )
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.Editorial.IdEditorial, new SelectList(string.Empty,"IdEditorial","Nombre"), "Seleccione una Editorial", htmlAttributes: new{@class = "form-control", @id="ddlEditorial"})
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.Idioma)
+                                @if (Model.Idioma.Idiomas != null)
+                                {
+                                    @Html.DropDownListFor(model => model.Idioma.IdIdioma, new SelectList(Model.Idioma.Idiomas, "IdIdioma", "Nombre"), "Selecciona un Idioma", new {@class = "form-control", @id="ddlIdioma"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.Idioma.IdIdioma, new SelectList(string.Empty,"IdIdioma", "Nombre"),"Seleccione un Idioma", htmlAttributes: new {@class = "form-control", @id="ddlIdioma"})
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.Autor)
+                                @if (Model.Autor.Autores != null)
+                                {
+                                    @Html.DropDownListFor(model => model.Autor.IdAutor, new SelectList(Model.Autor.Autores, "IdAutor", "Nombre"), "Selecciona un Autor", new {@class = "form-control", @id="ddlAutor"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.Autor.IdAutor, new SelectList(string.Empty,"IdAutor", "Nombre"),"Seleccione un Autor", htmlAttributes: new {@class = "form-control", @id="ddlAutor"})
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success" id="btnGuardar" onclick="Guardar()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 </div>
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Detalle</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>
+                                Accion efectuada correctamente
+                            </h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+       
+        function PreviewImagen(event) {
+            var output = document.getElementById('imgMedio');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src)
+            }
+        }
+    </script>
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        GetAll();
+        GetAllTipoMedio();
+        GetAllEditorial();
+        GetAllIdioma();
+        GetAllAutor();
+    });
+
+    function GetAll() {
+
+        $.ajax({
+
+            type: 'GET',
+            url: '@Url.Action("MedioGetAll")',
+            success: function (result) {
+                $('#tblMedios tbody').empty();
+
+                $.each(result.objects, function (i, medio) {
+                    var image;
+                    if (medio.imagen != null) {
+                        image = '<img id="imgUsuario" src = "data:image/png;base64,' + medio.imagen + '"width = "100" height = "100" />'
+                    }
+                    else {
+                        image = '<img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" id = "imgUsuario" width = "100" height = "100" />'
+                    }
+                    var filas =
+                        '<tr>'
+                        + '<td class="text-center">'
+                        + '<a class="btn btn-warning bi bi-pencil-fill" href="#" onclick="Update(' + medio.idMedio + ')">'
+                        + '</a>'
+                        + '</td>'
+                        + '<td class="visually-hidden">' + medio.idMedio + '</td>'
+                        + '<td class="text-center">' + medio.titulo + '</td>'
+                        + '<td class="text-center">' + medio.numeroPaginas + '</td>'
+                        + '<td class="text-center">' + medio.duracion + '</td>'
+                        + '<td class="text-center">' + medio.cantidadDisponible + '</td>'
+                        + '<td class="text-center">' + image + '</td>'
+                        + '<td class="visually-hidden">' + medio.tipoMedio.idTipoMedio + '</td>'
+                        + '<td class="text-center">' + medio.tipoMedio.nombre + '</td>'
+                        + '<td class="visually-hidden">' + medio.editorial.idEditorial + '</td>'
+                        + '<td class="text-center">' + medio.editorial.nombre + '</td>'
+                        + '<td class="visually-hidden">' + medio.idioma.idIdioma + '</td>'
+                        + '<td class="text-center">' + medio.idioma.nombre + '</td>'
+                        + '<td class="visually-hidden">' + medio.autor.idAutor + '</td>'
+                        + '<td class="text-center">' + medio.autor.nombre + '</td>'
+                        + '<td class ="text-center">'
+                        + '<a class = "btn btn-danger bi bi-trash3-fill" href="#" onclick="Delete(' + medio.idMedio + ')">'
+                        + '</a>'
+                        + '</td>'
+                        + '</tr>'
+
+                    $('#tblMedios tbody').append(filas);
+                });
+            },
+            error: function (alert) {
+                alert('Error en la consulta' + result.responseJSON.ErrorMessage);
+            }
+        });
+    };
+
+    function ShowModal(){
+        $('#txtIdMedio').val("");
+        $("#txtTitulo").val("");
+        $("#txtNumeroPaginas").val("");
+        $("#txtDuracion").val("");
+        $("#txtCantidadDisponible").val("");
+        UpdateImage('https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png');
+        var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
+        $('#fuImagen').replaceWith(newInput);
+        GetAllTipoMedio();
+        GetAllEditorial();
+        GetAllIdioma();
+        GetAllAutor();
+        $('#modal').modal('show');
+    };
+
+    function GetAllTipoMedio(){
+        $("#ddlTipoMedio").empty();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("TipoMedioGetAll")',
+            success: function (result) {
+                $("#ddlTipoMedio").append('<option value="' + 0 + '">' + 'Selecciona un Tipo Medio' + '</option>');
+                $.each(result.objects, function (i, tipomedio) {
+                    $("#ddlTipoMedio").append('<option value="'
+                        + tipomedio.idTipoMedio + '">'
+                        + tipomedio.nombre + '</option>');
+                });
+            }
+        });
+    }
+
+    function GetAllEditorial() {
+        $("#ddlEditorial").empty();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("EditorialGetAll")',
+            success: function (result) {
+                $("#ddlEditorial").append('<option value="' + 0 + '">' + 'Selecciona una Editorial' + '</option>');
+                $.each(result.objects, function (i, editorial) {
+                    $("#ddlEditorial").append('<option value="'
+                        + editorial.idEditorial + '">'
+                        + editorial.nombre + '</option>');
+                });
+            }
+        });
+    }
+
+    function GetAllIdioma() {
+        $("#ddlIdioma").empty();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("IdiomaGetAll")',
+            success: function (result) {
+                $("#ddlIdioma").append('<option value="' + 0 + '">' + 'Selecciona un Idioma' + '</option>');
+                $.each(result.objects, function (i, idioma) {
+                    $("#ddlIdioma").append('<option value="'
+                        + idioma.idIdioma + '">'
+                        + idioma.nombre + '</option>');
+                });
+            }
+        });
+    }
+
+    function GetAllAutor(){
+        $("#ddlAutor").empty();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("AutorGetAll")',
+            success: function (result){
+                $("#ddlAutor").append('<option value = "' + 0 + '">' + 'Selecciona un Autor' + '</option>');
+                $.each(result.objects, function (i, autor) {
+                    $("#ddlAutor").append('<option value = "'
+                        + autor.idAutor + '">'
+                        + autor.nombre + '</option>');
+                });
+            }
+        });
+    }
+
+    function UpdateImage(imageUrl) {
+        // Reemplaza la imagen por la nueva URL proporcionada
+        $('#imgMedio').attr('src', imageUrl);
+    }
+
+
+    function Guardar(){
+
+        var datos = new FormData(document.getElementById('FormularioMedio'));
+
+        $.ajax({
+            type:'POST',
+            url: '@Url.Action("Form")',
+            data: datos,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function (result){
+                $('#modal').modal('hide');
+                alert('Preceso realizado con exito.');
+                GetAll();
+            },
+            error: function (result){
+                alert('Error en la inserción' + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
+
+</script>

@@ -16,6 +16,13 @@ namespace PL.Controllers
 
             ML.Result resultPaises = BL.Pais.GetAll();
             editorial.Direccion.Colonia.Municipio.Estado.Pais.Paises = resultPaises.Objects;
+            //ML.Result resultEstados = BL.Estado.GetAll();
+            //editorial.Direccion.Colonia.Municipio.Estado.Estados = resultEstados.Objects;
+            //ML.Result resultMunicipios = BL.Municipio.GetAll();
+            //editorial.Direccion.Colonia.Municipio.Municipios = resultMunicipios.Objects;
+            //ML.Result resultColonias = BL.Colonia.GetAll();
+            //editorial.Direccion.Colonia.Colonias = resultColonias.Objects;
+
 
             //ML.Result result = BL.Editorial.GetAll();
 
@@ -64,10 +71,34 @@ namespace PL.Controllers
         public JsonResult GetById(int IdEditorial)
         {
             ML.Result result = BL.Editorial.GetById(IdEditorial);
-            ML.Editorial editorial = new ML.Editorial();
+            if (result.Correct)
+            {
+                //Inicializar variables de navegacion
+                ML.Editorial editorial = new ML.Editorial();
+                editorial.Direccion = new ML.Direccion();
+                editorial.Direccion.Colonia = new ML.Colonia();
+                editorial.Direccion.Colonia.Municipio = new ML.Municipio();
+                editorial.Direccion.Colonia.Municipio.Estado = new ML.Estado();
+                editorial.Direccion.Colonia.Municipio.Estado.Pais = new ML.Pais();
 
-            editorial = (ML.Editorial)result.Object; //Unboxing
-            return Json(result);
+                editorial = (ML.Editorial)result.Object; //Unboxing
+
+                ML.Result resultPaises = BL.Pais.GetAll();
+                ML.Result resultEstados = BL.Estado.GetByIdPais(editorial.Direccion.Colonia.Municipio.Estado.Pais.IdPais);
+                ML.Result resultMunicipios = BL.Municipio.GetByIdEstado(editorial.Direccion.Colonia.Municipio.Estado.IdEstado);
+                ML.Result resultColonias = BL.Colonia.GetByIdMunicipio(editorial.Direccion.Colonia.Municipio.IdMunicipio);
+
+                editorial.Direccion.Colonia.Municipio.Estado.Pais.Paises = resultPaises.Objects;
+                editorial.Direccion.Colonia.Municipio.Estado.Estados = resultEstados.Objects;
+                editorial.Direccion.Colonia.Municipio.Municipios = resultMunicipios.Objects;
+                editorial.Direccion.Colonia.Colonias = resultColonias.Objects;
+
+                return Json(result);
+            }
+            else
+            {
+                return Json(result);    
+            }
 
         }
 
