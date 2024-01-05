@@ -23,7 +23,7 @@ namespace PL.Controllers
     public class PrestamoController : Controller
     {//
 
-        public IActionResult MediosPrestados()
+        public IActionResult MediosPrestados(string Id)
         {
 
             ML.DetallePrestamo medio = new ML.DetallePrestamo();
@@ -32,10 +32,11 @@ namespace PL.Controllers
             //  prestamo.Id = User.getUserId();
 
             // ClaimsPrincipal principal2 = new ClaimsPrincipal();
-           // ;
+            // ;
+            //va a ser con el id que reciba 
 
-            ML.Result result = BL.Prestamo.LibrosPrestados(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
+            // ML.Result result = BL.Prestamo.LibrosPrestados(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            ML.Result result = BL.Prestamo.LibrosPrestados(Id);
             if (result.Correct)
             {
                 medio.DetallePrestamos = result.Objects;
@@ -52,7 +53,12 @@ namespace PL.Controllers
         {
 
             ML.Medio medio = new ML.Medio();
+            ML.UserIdentity userIdentity = new ML.UserIdentity();
             ML.Result result = BL.Medio.GetAll();
+            ML.Result result1 = BL.IdentityUser.GetAll();   
+            ML.MediosYUsuarios mediosYUsuarios = new ML.MediosYUsuarios();
+            mediosYUsuarios.UserIdentity = new ML.UserIdentity();   
+            mediosYUsuarios.Medio = new ML.Medio(); 
 
            // ML.Result result = BL.Prestamo.LibrosDisponibles(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -64,13 +70,26 @@ namespace PL.Controllers
             {
                 ViewBag.Mensaje = "Sin medios registrados aún";
             }
+            if (result1.Correct)
+            {
+               userIdentity.IdentityUsers = result1.Objects;
+            }
+            else
+            {
+                ViewBag.Mensaje = "Sin medios registrados aún";
+            }
+            mediosYUsuarios.UserIdentity = userIdentity;
+            mediosYUsuarios.Medio = medio;
 
-            return View(medio);
+
+            return View(mediosYUsuarios);
            
         }
 
+      
+       [HttpPost]
 
-        public IActionResult SacarEnPrestamo(int IdMedio)
+        public IActionResult SacarEnPrestamo(int IdMedio,ML.MediosYUsuarios mediosYUsuarios)
         {
             ML.DetallePrestamo detallePrestamo = new ML.DetallePrestamo();
             ML.Result result = BL.Medio.GetById(IdMedio);
@@ -81,14 +100,16 @@ namespace PL.Controllers
             }
             ML.Prestamo prestamo = new ML.Prestamo();
             // se obtiene el id del usuario4
-            ClaimsPrincipal principal = new ClaimsPrincipal();
+           // ClaimsPrincipal principal = new ClaimsPrincipal();
             //  string id = principal.FindFirstValue.ToString();
             //  prestamo.Id = User.getUserId();
 
             // ClaimsPrincipal principal2 = new ClaimsPrincipal();
             if (medio.CantidadDisponible > 0) 
-            { 
-            prestamo.Id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            {
+
+                prestamo.Id = mediosYUsuarios.UserIdentity.IdUsuario;
+           // prestamo.Id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             prestamo.Medio = new ML.Medio();
             prestamo.Medio = medio;
             prestamo.FechaSalida = DateTime.Today.ToString();
