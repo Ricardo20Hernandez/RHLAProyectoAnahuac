@@ -18,33 +18,33 @@
         </div>
     </div>
     <br />
-@*     @if (Model.Medios != null && Model.Medios.Count > 0)
+    @*     @if (Model.Medios != null && Model.Medios.Count > 0)
     { *@
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-responsive table-bordered" id="tblMedios">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="text-center">Eliminar</th>
-                            <th class="visually-hidden">IdMedio</th>
-                            <th class="text-center">Titulo</th>
-                            <th class="text-center">Paginas</th>
-                            <th class="text-center">Duracion</th>
-                            <th class="text-center">CantidadDisponible</th>
-                            <th class="text-center">Portada</th>
-                            <th class="visually-hidden">IdTipoMedio</th>
-                            <th class="text-center">Medio</th>
-                            <th class="visually-hidden">IdEditorial</th>
-                            <th class="text-center">Editorial</th>
-                            <th class="visually-hidden">IdIdioma</th>
-                            <th class="text-center">Idioma</th>
-                            <th class="visually-hidden">IdAutor</th>
-                            <th class="text-center">Autor</th>
-                            <th class="text-center">Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @*  @foreach (ML.Medio medio in Model.Medios)
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-responsive table-bordered" id="tblMedios">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center">Eliminar</th>
+                        <th class="visually-hidden">IdMedio</th>
+                        <th class="text-center">Titulo</th>
+                        <th class="text-center">Paginas</th>
+                        <th class="text-center">Duracion</th>
+                        <th class="text-center">CantidadDisponible</th>
+                        <th class="text-center">Portada</th>
+                        <th class="visually-hidden">IdTipoMedio</th>
+                        <th class="text-center">Medio</th>
+                        <th class="visually-hidden">IdEditorial</th>
+                        <th class="text-center">Editorial</th>
+                        <th class="visually-hidden">IdIdioma</th>
+                        <th class="text-center">Idioma</th>
+                        <th class="visually-hidden">IdAutor</th>
+                        <th class="text-center">Autor</th>
+                        <th class="text-center">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*  @foreach (ML.Medio medio in Model.Medios)
                     {
                     <tr>
                     <td class="text-center"><a class="btn btn-warning bi bi-pencil" href="@Url.Action("Form","Medio", new {IdMedio = medio.IdMedio})"></a></td>
@@ -74,19 +74,19 @@
                     <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>
                     </tr>
                     } *@
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
-@*     }
+    </div>
+    @*     }
     else
     {
-        <div class="alert alert-danger" role="alert">@ViewBag.Mensaje</div>
+    <div class="alert alert-danger" role="alert">@ViewBag.Mensaje</div>
     } *@
 </div>
 
 <div class="container">
-    @using(Html.BeginForm("Form","Medio", FormMethod.Post, new { enctype = "multipart/form-data", @id = "FormularioMedio" }))
+    @using (Html.BeginForm("Form", "Medio", FormMethod.Post, new { enctype = "multipart/form-data", @id = "FormularioMedio" }))
     {
         <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -239,7 +239,7 @@
 
 @section scripts{
     <script>
-       
+
         function PreviewImagen(event) {
             var output = document.getElementById('imgMedio');
             output.src = URL.createObjectURL(event.target.files[0]);
@@ -315,7 +315,7 @@
         });
     };
 
-    function ShowModal(){
+    function ShowModal() {
         $('#txtIdMedio').val("");
         $("#txtTitulo").val("");
         $("#txtNumeroPaginas").val("");
@@ -331,7 +331,7 @@
         $('#modal').modal('show');
     };
 
-    function GetAllTipoMedio(){
+    function GetAllTipoMedio() {
         $("#ddlTipoMedio").empty();
         $.ajax({
             type: 'GET',
@@ -379,12 +379,12 @@
         });
     }
 
-    function GetAllAutor(){
+    function GetAllAutor() {
         $("#ddlAutor").empty();
         $.ajax({
             type: 'GET',
             url: '@Url.Action("AutorGetAll")',
-            success: function (result){
+            success: function (result) {
                 $("#ddlAutor").append('<option value = "' + 0 + '">' + 'Selecciona un Autor' + '</option>');
                 $.each(result.objects, function (i, autor) {
                     $("#ddlAutor").append('<option value = "'
@@ -401,48 +401,48 @@
     }
 
 
-    function Guardar(){
+    function Guardar() {
 
         var datos = new FormData(document.getElementById('FormularioMedio'));
 
         $.ajax({
-            type:'POST',
+            type: 'POST',
             url: '@Url.Action("Form")',
             data: datos,
             processData: false,
             contentType: false,
             dataType: 'json',
-            success: function (result){
+            success: function (result) {
                 $('#modal').modal('hide');
                 alert('Preceso realizado con exito.');
                 GetAll();
             },
-            error: function (result){
+            error: function (result) {
                 alert('Error en la inserción' + result.responseJSON.ErrorMessage);
             }
         });
     }
 
-    function Update(idMedio){
+    function Update(idMedio) {
         var newInput = $("<input type = 'file' id='fuImagen' name = 'fuImagen' class = 'form-control' onchange='PreviewImagen(event)' />")
         $('#fuImagen').replaceWith(newInput);
 
         $.ajax({
             type: 'GET',
             url: '@Url.Action("GetById")',
-            data: {IdMedio: idMedio},
+            data: { IdMedio: idMedio },
             dataType: 'json',
 
-            success: function(result){
+            success: function (result) {
                 $('#txtIdMedio').val(result.object.idMedio)
                 $('#txtTitulo').val(result.object.titulo)
                 $('#txtNumeroPaginas').val(result.object.numeroPaginas)
                 $('#txtDuracion').val(result.object.duracion)
                 $('#txtCantidadDisponible').val(result.object.cantidadDisponible)
-                
-                if(result.object.imagen == null){
+
+                if (result.object.imagen == null) {
                     UpdateImage('https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png')
-                }else{
+                } else {
                     var imageUrl = 'data:image/png;base64,' + result.object.imagen;
                     UpdateImage(imageUrl);
                 }
@@ -454,10 +454,32 @@
                 $('#modal').modal('show');
 
             },
-            error: function(result){
+            error: function (result) {
                 alert('Error en la consulta' + result.responseJSON.ErrorMessage);
             }
         });
+    }
+
+    function Delete(idMedio) {
+
+        if (confirm("¿Estas seguro de querer eliminar este Medio?")) {
+            $.ajax({
+
+                type: 'DELETE',
+                url: '@Url.Action("Delete")',
+                data: { IdMedio: idMedio },
+                dateType: 'json',
+
+                success: function (result) {
+                    alert('El Medio se ha eliminado correctamente');
+                    GetAll();
+                },
+                error: function (result) {
+                    alert('No se puede eliminar medio, actualmente esta en prestamo' + result.responseJSON.ErrorMessage);
+                }
+
+            });
+        };
     }
 
 </script>

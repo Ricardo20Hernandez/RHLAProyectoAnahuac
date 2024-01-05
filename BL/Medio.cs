@@ -243,7 +243,7 @@ namespace BL
                         query.CantidadDisponible = medio.CantidadDisponible.Value;
                         query.Imagen = medio.Imagen;
                         query.IdTipoMedio = medio.TipoMedio.IdTipoMedio;
-                        query.IdEditorial = medio.Editorial.IdEditorial;
+                        query.IdEditorial = (medio.Editorial.IdEditorial == 0) ? null : medio.Editorial.IdEditorial;
                         query.IdIdioma = medio.Idioma.IdIdioma;
                         query.IdAutor = medio.Autor.IdAutor;
 
