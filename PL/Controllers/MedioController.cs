@@ -109,6 +109,15 @@ namespace PL.Controllers
             }
         }
 
+        public JsonResult GetById(int IdMedio)
+        {
+            ML.Result result = BL.Medio.GetById(IdMedio);
+            ML.Medio medio = new ML.Medio();
+
+            medio = (ML.Medio)result.Object; //Unboxing
+            return Json(result);         
+        }
+
         //[HttpGet]
         //public IActionResult Form(int? IdMedio)
         //{
@@ -235,20 +244,36 @@ namespace PL.Controllers
             }
         }
 
-        public IActionResult Delete(int IdMedio)
+        public JsonResult Delete(int IdMedio)
         {
             ML.Result result = BL.Medio.Delete(IdMedio);
 
             if (result.Correct)
             {
                 ViewBag.Mensaje = "Medio eliminado correctamente";
+                return Json(result);
             }
             else
             {
                 ViewBag.Mensaje = "Error al eliminar el medio";
+                return Json(result);
             }
-            return View("Modal");
         }
+
+        //public IActionResult Delete(int IdMedio)
+        //{
+        //    ML.Result result = BL.Medio.Delete(IdMedio);
+
+        //    if (result.Correct)
+        //    {
+        //        ViewBag.Mensaje = "Medio eliminado correctamente";
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Mensaje = "Error al eliminar el medio";
+        //    }
+        //    return View("Modal");
+        //}
 
         public byte[] convertFileToByteArray(IFormFile fuImagen)
         {

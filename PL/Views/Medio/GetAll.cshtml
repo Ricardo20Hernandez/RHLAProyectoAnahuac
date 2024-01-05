@@ -423,4 +423,41 @@
         });
     }
 
+    function Update(idMedio){
+        var newInput = $("<input type = 'file' id='fuImagen' name = 'fuImagen' class = 'form-control' onchange='PreviewImagen(event)' />")
+        $('#fuImagen').replaceWith(newInput);
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetById")',
+            data: {IdMedio: idMedio},
+            dataType: 'json',
+
+            success: function(result){
+                $('#txtIdMedio').val(result.object.idMedio)
+                $('#txtTitulo').val(result.object.titulo)
+                $('#txtNumeroPaginas').val(result.object.numeroPaginas)
+                $('#txtDuracion').val(result.object.duracion)
+                $('#txtCantidadDisponible').val(result.object.cantidadDisponible)
+                
+                if(result.object.imagen == null){
+                    UpdateImage('https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png')
+                }else{
+                    var imageUrl = 'data:image/png;base64,' + result.object.imagen;
+                    UpdateImage(imageUrl);
+                }
+                $('#ddlTipoMedio').val(result.object.tipoMedio.idTipoMedio)
+                $('#ddlEditorial').val(result.object.editorial.idEditorial)
+                $('#ddlIdioma').val(result.object.idioma.idIdioma)
+                $('#ddlAutor').val(result.object.autor.idAutor)
+
+                $('#modal').modal('show');
+
+            },
+            error: function(result){
+                alert('Error en la consulta' + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
+
 </script>
