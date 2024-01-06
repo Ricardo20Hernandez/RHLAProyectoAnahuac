@@ -116,7 +116,7 @@ namespace BL
                     var query = (from prestamo in context.Prestamos
                                  join detallePrestamoLq in context.DetallePrestamos on prestamo.IdPrestamo equals detallePrestamoLq.IdPrestamo
                                  
-                                 where prestamo.Id == detallePrestamo.Prestamo.Id && prestamo.IdMedio == detallePrestamo.Prestamo.Medio.IdMedio
+                                 where prestamo.Id == detallePrestamo.Prestamo.Id && prestamo.IdMedio == detallePrestamo.Prestamo.Medio.IdMedio && detallePrestamoLq.Entregado == false
                                  select new
                                  {
                                      IdPrestamo = prestamo.IdPrestamo,

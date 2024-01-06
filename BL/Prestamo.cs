@@ -323,8 +323,8 @@ try
                             detallePrestamo.Prestamo.Medio.TipoMedio = new ML.TipoMedio();
                             detallePrestamo.Prestamo.Medio.Autor = new ML.Autor();
                             detallePrestamo.Prestamo.IdPrestamo = prestamoLQ.IdPrestamo;
-                            detallePrestamo.Prestamo.FechaSalida = prestamoLQ.FechaSalida.ToString();
-                            detallePrestamo.Prestamo.FechaEntregaEsperada = prestamoLQ.FechaEntregaEsperada.ToString();
+                            detallePrestamo.Prestamo.FechaSalida = prestamoLQ.FechaSalida.ToString("dd/MM/yyyy");
+                            detallePrestamo.Prestamo.FechaEntregaEsperada = prestamoLQ.FechaEntregaEsperada.ToString("dd/MM/yyyy");
                             detallePrestamo.Prestamo.Medio.IdMedio = prestamoLQ.IdMedio.Value;
                             detallePrestamo.Prestamo.Medio.Titulo = prestamoLQ.Titulo;
                             detallePrestamo.Prestamo.Medio.Imagen = prestamoLQ.Imagen;
@@ -335,7 +335,10 @@ try
                             detallePrestamo.Prestamo.Medio.Autor.ApellidoPaterno = prestamoLQ.ApellidoPaterno;
                             detallePrestamo.Prestamo.Medio.Autor.ApellidoMaterno = prestamoLQ.ApellidoMaterno;
                             detallePrestamo.Prestamo.Id = prestamoLQ.Id;
-                            detallePrestamo.FechaEntregaReal = prestamoLQ.FechaEntregaReal.ToString();
+                            if(prestamoLQ.FechaEntregaReal.HasValue) 
+                            {detallePrestamo.FechaEntregaReal = prestamoLQ.FechaEntregaReal.Value.ToString("dd/MM/yyyy"); 
+                            }
+                            
                             detallePrestamo.Entregado = prestamoLQ.Entregado;
                          
 
@@ -427,8 +430,8 @@ try
                             detallePrestamo.Prestamo.Medio.Editorial = new ML.Editorial();
                             detallePrestamo.Prestamo.Medio.Idioma = new ML.Idioma();
                             detallePrestamo.Prestamo.IdPrestamo = prestamoLQ.IdPrestamo;
-                            detallePrestamo.Prestamo.FechaSalida = prestamoLQ.FechaSalida.ToString();
-                            detallePrestamo.Prestamo.FechaEntregaEsperada = prestamoLQ.FechaEntregaEsperada.ToString();
+                            detallePrestamo.Prestamo.FechaSalida = prestamoLQ.FechaSalida.ToString("dd/MM/yyyy");
+                            detallePrestamo.Prestamo.FechaEntregaEsperada = prestamoLQ.FechaEntregaEsperada.ToString("dd/MM/yyyy");
                             detallePrestamo.Prestamo.Medio.IdMedio = prestamoLQ.IdMedio.Value;
                             detallePrestamo.Prestamo.Medio.Titulo = prestamoLQ.Titulo;
                             detallePrestamo.Prestamo.Medio.Imagen = prestamoLQ.Imagen;
@@ -439,7 +442,10 @@ try
                             detallePrestamo.Prestamo.Medio.Autor.ApellidoPaterno = prestamoLQ.ApellidoPaterno;
                             detallePrestamo.Prestamo.Medio.Autor.ApellidoMaterno = prestamoLQ.ApellidoMaterno;
                             detallePrestamo.Prestamo.Id = prestamoLQ.Id;
-                            detallePrestamo.FechaEntregaReal = prestamoLQ.FechaEntregaReal.ToString();
+                            if (prestamoLQ.FechaEntregaReal.HasValue)
+                            {
+                                detallePrestamo.FechaEntregaReal = prestamoLQ.FechaEntregaReal.Value.ToString("dd/MM/yyyy");
+                            }
                             detallePrestamo.Entregado = prestamoLQ.Entregado;
                             detallePrestamo.Prestamo.Medio.Editorial.IdEditorial = prestamoLQ.IdEditorial;
                             detallePrestamo.Prestamo.Medio.Editorial.Nombre = prestamoLQ.NombreEditorial;

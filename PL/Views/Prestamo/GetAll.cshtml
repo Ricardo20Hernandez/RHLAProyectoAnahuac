@@ -11,20 +11,27 @@
             <br />
         </div>
     </div>
-   <div class="row">
-        <div class="col-md-1 ms-auto">
-            <a class="btn btn-success" asp-action="MediosPrestados" asp-controller="Prestamo">Medios en prestamo</a>
+    <div class="row">
+    
+       @*<div class="col-md-2 ms-auto">
+            <a class="btn btn-success" asp-action="MisMediosPrestados" asp-controller="Prestamo">Mis libros prestados</a>
+            <br />
+        </div>*@
+
+        
+        <div class="col-md-2 ms-auto">
+            <a class="btn btn-success" asp-action="GetAll3" asp-controller="Prestamo">Medios en prestamo usuarios en general</a>
+            <br />
+        </div>
+    
+
+    
+        <div class="col-md-2 ms-auto">
+            <a class="btn btn-success" asp-action="GetAll4" asp-controller="Prestamo">Devolver Prestamo</a>
             <br />
         </div>
     </div>
-    @using (Html.BeginForm("SacarEnPrestamo", "Prestamo", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{   
-    <div class="row">
-        <div class="col-md">
-            @Html.DropDownListFor(model => model.UserIdentity.IdentityUsers, new SelectList(Model.UserIdentity.IdentityUsers,"IdUsuario","UserName"),"Seleccione un Usuario",new{ @class="form-control"})
-        </div>
-    </div>
-
+ 
     <br />
     @if (Model.Medio.Medios != null && Model.Medio.Medios.Count > 0)
     {
@@ -55,7 +62,7 @@
                         @foreach (ML.Medio medio in Model.Medio.Medios)
                         {
                             <tr>
-                                <td class="text-center"><a class="btn btn-warning bi bi-pencil" href="@Url.Action("SacarEnPrestamo","Prestamo", new {IdMedio = medio.IdMedio})"></a></td>
+                                <td class="text-center"><a class="btn btn-warning bi bi-pencil" href="@Url.Action("GetAll2","Prestamo", new {IdMedio = medio.IdMedio})"></a></td>
                                 <td class="visually-hidden">@medio.IdMedio</td>
                                 <td class="text-center">@medio.Titulo</td>
                                 <td class="text-center">@medio.NumeroPaginas</td>
@@ -92,5 +99,4 @@
     {
         <div class="alert alert-danger" role="alert">@ViewBag.Mensaje</div>
     }
-}
 

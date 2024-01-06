@@ -18,8 +18,7 @@
     </div>
     </div>
     <br />
-
-    
+    @* <h2>@Model.Prestamo.Id</h2>*@
     @if (Model.DetallePrestamos != null && Model.DetallePrestamos.Count > 0)
     {
         <div class="row">
@@ -27,7 +26,7 @@
                 <table class="table table-responsive table-bordered" id="myTable">
                     <thead class="table-light">
                         <tr>
-                            @*<th class="text-center">Regresar</th>*@
+                            <th class="text-center">Regresar</th>
                             <th class="visually-hidden">IdMedio</th>
                             <th class="text-center">Titulo</th>
                          
@@ -37,9 +36,6 @@
                             
                             <th class="visually-hidden">IdAutor</th>
                             <th class="text-center">Autor</th>
-                            <th class="text-center">Fecha de Salida</th>
-                            <th class="text-center">Fecha de Entrega</th>
-
                             @*<th class="text-center">Eliminar</th>*@
                         </tr>
                     </thead>
@@ -47,9 +43,10 @@
                         @foreach (ML.DetallePrestamo detallePrestamo in Model.DetallePrestamos)
                         {
                             <tr>
-
-                                @*<td class="text-center"><a class="btn btn-success bi bi-pencil" href="@Url.Action("Devolver","Prestamo", new {IdMedio = detallePrestamo.Prestamo.Medio.IdMedio})"></a></td>*@
+                                <td class="text-center"><a class="btn btn-success bi bi-pencil" href="@Url.Action("Devolver","Prestamo", new {IdMedio = detallePrestamo.Prestamo.Medio.IdMedio , Id = detallePrestamo.Prestamo.Id})"></a></td>
                                 <td class="visually-hidden">@detallePrestamo.Prestamo.IdPrestamo</td>
+                                <td class="visually-hidden">@detallePrestamo.Prestamo.Id</td>
+
                                 <td class="text-center">@detallePrestamo.Prestamo.Medio.Titulo</td>
                                 
                                 <td class="text-center">
@@ -67,8 +64,6 @@
                                 
                                 <td class="visually-hidden">@detallePrestamo.Prestamo.Medio.Autor.IdAutor</td>
                                 <td class="text-center">@detallePrestamo.Prestamo.Medio.Autor.Nombre</td>
-                                <td class="text-center">@detallePrestamo.Prestamo.FechaSalida</td>
-                                <td class="text-center">@detallePrestamo.Prestamo.FechaEntregaEsperada</td>
                                 @* <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>*@
                             </tr>
                         }
