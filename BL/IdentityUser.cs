@@ -51,7 +51,7 @@ namespace BL
             return result;
         }
 
-        public static ML.Result Asignar(ML.UserIdentity user)
+        public static ML.Result Asignar(string IdUsuario, Guid IdRol)
         {
             ML.Result result = new ML.Result();
 
@@ -60,7 +60,7 @@ namespace BL
 
                 using (DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
                 {
-                    var query = context.Database.ExecuteSqlRaw($"AddAspNetUserRoles '{user.IdUsuario}', '{user.Rol.RoleId}'");
+                    var query = context.Database.ExecuteSqlRaw($"AddAspNetUserRoles '{IdUsuario}', '{IdRol}'");
 
                     if (query > 0)
                     {

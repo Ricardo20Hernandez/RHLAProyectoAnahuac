@@ -29,7 +29,7 @@
     <div class="row">
         <div class="col-md-1 ms-auto">
             @* @Html.ActionLink("+", "Form", "RolController", htmlAttributes: new { @class = "btn btn-success" }) *@
-            <button type="button" class="btn btn-success bi bi-person-plus-fill" id="btnAbrirAgregar" onclick="ShowModal()">Agregar</button>
+            <button type="button" class="btn btn-success" id="btnAbrirAgregar" onclick="ShowModal()"> +</button>
             <br />
             <br />
         </div>
@@ -140,6 +140,39 @@
     }
 </div>
 
+<div class="container">
+    @using (Html.BeginForm("Agregar", "Rol", FormMethod.Post, new { enctype = "multipart/form-data", @id = "FormularioAsignarRol" }))
+    {
+        <div class="modal fade" id="modalAsignar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Asignar Rol</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="idRol" class="visually-hidden">IdRol</label>
+                                <input type="text" class="visually-hidden" id="txtIdRolAsignar" name="id" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <select id="ddlUsuario" class="form-control"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success" id="btnAsignar" onclick="AsignarRol()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
@@ -227,7 +260,7 @@
 
             },
             error: function (result) {
-                alert('Error en la consulta' + result.response.JSON.ErrorMessage);
+                alert('Error en la consulta' + result.responseJSON.ErrorMessage);
             }
         });
     }
@@ -249,6 +282,48 @@
                 }
             });
         }
+    }
+
+    function Asignar(id) {
+        $("#txtIdRolAsignar").val(id)
+        $.ajax({
+            type:'GET',
+            url: '@Url.Action("UsuariosGetAll")',
+            dataType:'json',
+            success: function(result){
+                $("#ddlUsuario").empty();
+                $("#ddlUsuario").append('<option value ="' + 0 + '">' + 'Seleccione un Usuario' + '</option>');
+                $.each(result.objects, function (i, usuario) {
+                    $("#ddlUsuario").append('<option value ="'
+                        + usuario.idUsuario + '">'
+                        + usuario.userName + '</option>');
+                });
+            }
+        });
+
+        $('#modalAsignar').modal('show')
+    };
+
+    function AsignarRol() {
+
+        var idUsuario = $('#ddlUsuario').val();
+        var idRol = $('#txtIdRolAsignar').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Asignar")',
+            data: { idUsuario: idUsuario, idRol: idRol },
+
+            success: function(result){
+
+                $("#modalAsignar").modal('hide');
+                alert("Rol Asignado correctamente a usuario");
+                GetAll();
+            },
+            error: function(result){
+                alert("Error en la asignación de Rol" + result.responseJSON.ErrorMessage);
+            }
+        })
     }
 
 </script>

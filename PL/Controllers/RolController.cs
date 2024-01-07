@@ -147,39 +147,39 @@ namespace PL.Controllers
 
         }
 
-        [HttpGet]
-        public IActionResult Asignar(Guid IdRole, string Name)
-        {
-            ML.Result result = BL.IdentityUser.GetAll();
-            ML.UserIdentity user = new ML.UserIdentity();
+        //[HttpGet]
+        //public IActionResult Asignar(Guid IdRole, string Name)
+        //{
+        //    ML.Result result = BL.IdentityUser.GetAll();
+        //    ML.UserIdentity user = new ML.UserIdentity();
 
-            if (result.Correct)
-            {
-                user.IdentityUsers = result.Objects;
-            }
+        //    if (result.Correct)
+        //    {
+        //        user.IdentityUsers = result.Objects;
+        //    }
 
-            user.Rol = new Rol(); //Inicializar variable de navegación
-            user.Rol.Name = Name;
-            ViewBag.Name = Name;
-            user.Rol.RoleId = IdRole;
+        //    user.Rol = new Rol(); //Inicializar variable de navegación
+        //    user.Rol.Name = Name;
+        //    ViewBag.Name = Name;
+        //    user.Rol.RoleId = IdRole;
 
-            return View(user);
-        }
+        //    return View(user);
+        //}
 
-        [HttpPost]
-        public IActionResult Asignar(ML.UserIdentity user)
-        {
-            ML.Result result = BL.IdentityUser.Asignar(user);
-            if (result.Correct)
-            {
-                ViewBag.Mensaje = "Rol añadido correctamente a usuario";
-            }
-            else
-            {
-                ViewBag.Mensaje = "Problemas al añadir rol a usuario " + result.ErrorMessage;
-            }
-            return PartialView("Modal");
-        }
+        //[HttpPost]
+        //public IActionResult Asignar(ML.UserIdentity user)
+        //{
+        //    ML.Result result = BL.IdentityUser.Asignar(user);
+        //    if (result.Correct)
+        //    {
+        //        ViewBag.Mensaje = "Rol añadido correctamente a usuario";
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Mensaje = "Problemas al añadir rol a usuario " + result.ErrorMessage;
+        //    }
+        //    return PartialView("Modal");
+        //}
 
         //public async Task<IActionResult> Delete(Guid IdRole)
         //{
@@ -201,6 +201,29 @@ namespace PL.Controllers
 
         //    return View("GetAll", roleManager.Roles);
         //}
+
+        public IActionResult UsuariosGetAll()
+        {
+            ML.Result result = BL.IdentityUser.GetAll();
+            ML.UserIdentity user = new ML.UserIdentity();
+
+            return Json(result);
+ 
+        }
+
+        [HttpPost]
+        public IActionResult Asignar(string idUsuario, Guid idRol)
+        {
+            ML.Result result = BL.IdentityUser.Asignar(idUsuario, idRol);
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
 
         public async Task<IActionResult> Delete(Guid IdRole)
         {
