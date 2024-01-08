@@ -1,0 +1,46 @@
+﻿@model ML.MediosYUsuarios
+@{
+            //ViewData["Title"] = "Asignar";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <h1 style="font-weight:bold">Prestar Medios</h1>
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <h4>Elige el usuario para prestar medios </h4>
+            <br />
+        </div>
+    </div>
+
+    @using (Html.BeginForm("SacarEnPrestamo", "Prestamo", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-md">
+                @Html.HiddenFor(model => model.UserIdentity.Rol.RoleId)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                @Html.LabelFor(model => model.Medio.IdMedio, new{ @class = "visually-hidden"})
+                @Html.TextBoxFor(model => model.Medio.IdMedio, new{ @class = "visually-hidden"})
+            </div>
+            <div class="col-md">
+                @Html.DropDownListFor(model => model.UserIdentity.IdUsuario, new SelectList(Model.UserIdentity.IdentityUsers,"IdUsuario","UserName"),"Seleccione un Usuario",new{ @class="form-control"})
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md">
+                <input type="submit" class="btn btn-success" value="Prestar Medio" />
+            </div>
+        </div>
+    }
+</div>
+
