@@ -15,11 +15,24 @@ namespace PL.Controllers
             roleManager = roleMgr;
         }
 
+        //[HttpGet]
+        //public IActionResult GetAll()
+        //{
+        //    var Roles = roleManager.Roles.ToList();
+        //    return View(Roles);
+        //}
+
         [HttpGet]
         public IActionResult GetAll()
         {
             var Roles = roleManager.Roles.ToList();
             return View(Roles);
+        }
+
+        public IActionResult RolesGetAll()
+        {
+            var Roles = roleManager.Roles.ToList();
+            return Ok(Roles);
         }
 
         [HttpGet]
@@ -41,21 +54,59 @@ namespace PL.Controllers
 
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> Form([Required] Microsoft.AspNetCore.Identity.IdentityRole rol)
+        //{
+        //    if (ModelState.IsValid) //Validar si lo ingresado en el form cumple
+        //    {
+        //        IdentityRole role = await roleManager.FindByIdAsync(rol.Id.ToString());
+        //        //Add O Update
+        //        if (role == null)
+        //        {
+        //            IdentityResult result = await roleManager.CreateAsync(new IdentityRole(rol.Name)); //Crear
+
+        //            if (result.Succeeded)
+        //            {
+        //                ViewBag.Mensaje = "Rol añadido correctamente";
+        //                return View("Modal");
+
+        //            }
+        //            else
+        //            {
+
+        //            }
+        //        }
+        //        else //Actualizar
+        //        {
+        //            role.Id = await roleManager.GetRoleIdAsync(rol);
+        //            role.Name = await roleManager.GetRoleNameAsync(rol);
+
+        //            IdentityResult result = await roleManager.UpdateAsync(role);
+        //            if (result.Succeeded)
+        //            {
+        //                ViewBag.Mensaje = "Rol actualizado correctamente";
+        //                return View("Modal");
+        //            }
+        //        }
+        //    }
+        //    return View(rol);
+        //}
+
         [HttpPost]
         public async Task<IActionResult> Form([Required] Microsoft.AspNetCore.Identity.IdentityRole rol)
         {
-            if (ModelState.IsValid) //Validar si lo ingresado en el form cumple
-            {
-                IdentityRole role = await roleManager.FindByIdAsync(rol.Id.ToString());
+            //if (ModelState.IsValid) //Validar si lo ingresado en el form cumple
+            //{
+                IdentityRole role = new IdentityRole();
                 //Add O Update
-                if (role == null)
+                if (rol.Id == null)
                 {
                     IdentityResult result = await roleManager.CreateAsync(new IdentityRole(rol.Name)); //Crear
 
                     if (result.Succeeded)
                     {
                         ViewBag.Mensaje = "Rol añadido correctamente";
-                        return View("Modal");
+                        return Json(result);
 
                     }
                     else
@@ -72,45 +123,106 @@ namespace PL.Controllers
                     if (result.Succeeded)
                     {
                         ViewBag.Mensaje = "Rol actualizado correctamente";
-                        return View("Modal");
+                        return Json(result);
                     }
                 }
-            }
+            //}
             return View(rol);
         }
 
-        [HttpGet]
-        public IActionResult Asignar(Guid IdRole, string Name)
+        public JsonResult GetById(string idRol)
+        {
+            ML.Result result = BL.IdentityUser.GetById(idRol);
+            ML.Rol rol = new ML.Rol();
+            if (result.Correct)
+            {
+                rol = (ML.Rol)result.Object;
+                return Json(result);
+
+            }
+            else
+            {
+                return Json(result);
+            }
+
+        }
+
+        //[HttpGet]
+        //public IActionResult Asignar(Guid IdRole, string Name)
+        //{
+        //    ML.Result result = BL.IdentityUser.GetAll();
+        //    ML.UserIdentity user = new ML.UserIdentity();
+
+        //    if (result.Correct)
+        //    {
+        //        user.IdentityUsers = result.Objects;
+        //    }
+
+        //    user.Rol = new Rol(); //Inicializar variable de navegación
+        //    user.Rol.Name = Name;
+        //    ViewBag.Name = Name;
+        //    user.Rol.RoleId = IdRole;
+
+        //    return View(user);
+        //}
+
+        //[HttpPost]
+        //public IActionResult Asignar(ML.UserIdentity user)
+        //{
+        //    ML.Result result = BL.IdentityUser.Asignar(user);
+        //    if (result.Correct)
+        //    {
+        //        ViewBag.Mensaje = "Rol añadido correctamente a usuario";
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Mensaje = "Problemas al añadir rol a usuario " + result.ErrorMessage;
+        //    }
+        //    return PartialView("Modal");
+        //}
+
+        //public async Task<IActionResult> Delete(Guid IdRole)
+        //{
+        //    IdentityRole role = await roleManager.FindByIdAsync(IdRole.ToString());
+
+        //    if (role != null)
+        //    {
+        //        IdentityResult result = await roleManager.DeleteAsync(role);
+        //        if (result.Succeeded)
+        //        {
+        //            ViewBag.Mensaje = "Rol eliminado correctamente";
+        //            return View("Modal");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ModelState.AddModelError("", "Rol no encontrado");
+        //    }
+
+        //    return View("GetAll", roleManager.Roles);
+        //}
+
+        public IActionResult UsuariosGetAll()
         {
             ML.Result result = BL.IdentityUser.GetAll();
             ML.UserIdentity user = new ML.UserIdentity();
 
-            if (result.Correct)
-            {
-                user.IdentityUsers = result.Objects;
-            }
-
-            user.Rol = new Rol(); //Inicializar variable de navegación
-            user.Rol.Name = Name;
-            ViewBag.Name = Name;
-            user.Rol.RoleId = IdRole;
-
-            return View(user);
+            return Json(result);
+ 
         }
 
         [HttpPost]
-        public IActionResult Asignar(ML.UserIdentity user)
+        public IActionResult Asignar(string idUsuario, Guid idRol)
         {
-            ML.Result result = BL.IdentityUser.Asignar(user);
+            ML.Result result = BL.IdentityUser.Asignar(idUsuario, idRol);
             if (result.Correct)
             {
-                ViewBag.Mensaje = "Rol añadido correctamente a usuario";
+                return Ok(result);
             }
             else
             {
-                ViewBag.Mensaje = "Problemas al añadir rol a usuario " + result.ErrorMessage;
+                return BadRequest(result);
             }
-            return PartialView("Modal");
         }
 
         public async Task<IActionResult> Delete(Guid IdRole)
@@ -122,16 +234,14 @@ namespace PL.Controllers
                 IdentityResult result = await roleManager.DeleteAsync(role);
                 if (result.Succeeded)
                 {
-                    ViewBag.Mensaje = "Rol eliminado correctamente";
-                    return View("Modal");
+                    return Json(result);
+                }
+                else
+                {
+                    return Json(result);
                 }
             }
-            else
-            {
-                ModelState.AddModelError("", "Rol no encontrado");
-            }
-
-            return View("GetAll", roleManager.Roles);
+            return Json(role);
         }
     }
 }

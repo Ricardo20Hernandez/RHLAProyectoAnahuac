@@ -256,13 +256,13 @@ namespace BL
                     if (query.Count > 0)
                     {
                         result.Objects = new List<object>();
-                        foreach (var user in query)
+                        foreach (var autores in query)
                         {
-                            ML.Autor usuario = new ML.Autor();
-                            usuario.IdAutor = user.IdAutor;
-                            usuario.Nombre = user.Nombre;
+                            ML.Autor autor = new ML.Autor();
+                            autor.IdAutor = autores.IdAutor;
+                            autor.Nombre = autores.Nombre;
 
-                            result.Objects.Add(usuario);
+                            result.Objects.Add(autor);
                         }
                         result.Correct = true;
                     }

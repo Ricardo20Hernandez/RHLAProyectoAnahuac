@@ -50,5 +50,43 @@ namespace BL
             }
             return result;
         }
+
+        public static ML.Result GetAll()
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RhlaproyectoAnahuacContext context = new DL.RhlaproyectoAnahuacContext())
+                {
+                    var query = (from estado in context.Estados
+                                 select new
+                                 {
+                                     IdEstado = estado.IdEstado,
+                                     Nombre = estado.Nombre
+                                 }).ToList();
+
+                    if (query.Count() > 0)
+                    {
+                        result.Objects = new List<object>();
+                        foreach (var estados in query)
+                        {
+                            ML.Estado estado = new ML.Estado();
+                            estado.IdEstado = estados.IdEstado;
+                            estado.Nombre = estados.Nombre;
+
+                            result.Objects.Add(estado);
+                        }
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.Ex = ex;
+                //throw;
+            }
+            return result;
+        }
     }
 }

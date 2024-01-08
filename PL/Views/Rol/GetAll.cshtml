@@ -28,50 +28,304 @@
 
     <div class="row">
         <div class="col-md-1 ms-auto">
-            @Html.ActionLink("+", "Form", "RolController", htmlAttributes: new { @class = "btn btn-success" })
+            @* @Html.ActionLink("+", "Form", "RolController", htmlAttributes: new { @class = "btn btn-success" }) *@
+            <button type="button" class="btn btn-success" id="btnAbrirAgregar" onclick="ShowModal()"> +</button>
             <br />
             <br />
         </div>
     </div>
 
-    @if (Model != null)
+    @*     @if (Model != null)
     {
-        <div class="row">
-            <table class="table table-hover table-striped table-bordered table-responsive" id="table_usuarios">
-                <thead>
-                    <tr class="table-secondary">
-                        <td style="display :none;">id</td>
-                        <td>Asignar Rol</td>
-                        <td>Nombre</td>
-                        <td>Editar</td>
-                        <td>Eliminar</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var role in Model)
-                    {
-                        <tr>
-                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Asignar", "Rol", new { IdRole = role.Id, Name= role.Name})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
-                            <td style="display :none;">@role.Id </td>
+    <div class="row">
+    <table class="table table-hover table-striped table-bordered table-responsive" id="table_usuarios">
+    <thead>
+    <tr class="table-secondary">
+    <td style="display :none;">id</td>
+    <td>Asignar Rol</td>
+    <td>Nombre</td>
+    <td>Editar</td>
+    <td>Eliminar</td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var role in Model)
+    {
+    <tr>
+    <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Asignar", "Rol", new { IdRole = role.Id, Name= role.Name})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+    <td style="display :none;">@role.Id </td>
 
-                            <td>@role.Name</td>
-                            @*IdRole es un Parametro tipo Guid*@
-                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Form", "Rol", new { IdRole = role.Id, Name= role.Name})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
-                            <td style="display :none;">@role.Id </td>                                                                                     @*La variable IdRole se llama así porque esta declarada como parametro en La Action del Contolador tal cual*@
+    <td>@role.Name</td>
+    IdRole es un Parametro tipo Guid
+    <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Form", "Rol", new { IdRole = role.Id, Name= role.Name})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+    <td style="display :none;">@role.Id </td>                                                                                     La variable IdRole se llama así porque esta declarada como parametro en La Action del Contolador tal cual
 
-                            @*IdRole es un Parametro tipo Guid*@
-                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Rol",  new { IdRole = role.Id })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+    IdRole es un Parametro tipo Guid
+    <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Rol",  new { IdRole = role.Id })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+    </tr>
+    }
+    </tbody>
+    </table>
+    </div>
     }
     else
     {
-        <div class="alert alert-danger" role="alert">No se encontrarón Roles</div>
-    }
+    <div class="alert alert-danger" role="alert">No se encontrarón Roles</div>
+    } *@
+
+    <div class="row">
+        <table class="table table-hover table-striped table-bordered table-responsive" id="tblRoles">
+            <thead>
+                <tr class="table-secondary">
+                    @* <td style="display :none;">id</td> *@
+                    <td>Asignar Rol</td>
+                    <td>Nombre</td>
+                    <td>Editar</td>
+                    <td>Eliminar</td>
+                </tr>
+            </thead>
+            <tbody>
+                @*                 @foreach (var role in Model)
+                { *@
+                <tr>
+                    @*                      <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Asignar", "Rol", new { IdRole = role.Id, Name= role.Name})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+                    <td style="display :none;">@role.Id </td>
+
+                    <td>@role.Name</td>
+                    IdRole es un Parametro tipo Guid
+                    <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Form", "Rol", new { IdRole = role.Id, Name= role.Name})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+                    <td style="display :none;">@role.Id </td>                                                                                     La variable IdRole se llama así porque esta declarada como parametro en La Action del Contolador tal cual
+
+                    IdRole es un Parametro tipo Guid
+                    <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Rol",  new { IdRole = role.Id })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td> *@
+                </tr>
+                @*                 } *@
+            </tbody>
+        </table>
+    </div>
 
 </div>
+
+<div class="container">
+    @using (Html.BeginForm("Form", "Rol", FormMethod.Post, new { enctype = "multipart/form-data", @id = "FormularioRol" }))
+    {
+        <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Rol</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="idRol" class="visually-hidden">IdRol</label>
+                                <input type="text" class="visually-hidden" id="txtIdRol" name="id" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="idRol">Nombre:</label>
+                                <input type="text" class="form-control" id="txtNombre" name="name" placeholder="ejem. Administrador" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success" id="btnGuardar" onclick="Guardar()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="container">
+    @using (Html.BeginForm("Agregar", "Rol", FormMethod.Post, new { enctype = "multipart/form-data", @id = "FormularioAsignarRol" }))
+    {
+        <div class="modal fade" id="modalAsignar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Asignar Rol</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="idRol" class="visually-hidden">IdRol</label>
+                                <input type="text" class="visually-hidden" id="txtIdRolAsignar" name="id" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <select id="ddlUsuario" class="form-control"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success" id="btnAsignar" onclick="AsignarRol()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        GetAll();
+    });
+
+    function GetAll() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("RolesGetAll")',
+            success: function (result) {
+                $('#tblRoles tbody').empty();
+
+                $.each(result, function (i, role) {
+                    var filas = `
+                     <tr>
+                         <td class = "text-center">
+                                 <button class = "btn btn-success bi bi-person-fill-add" href="#" onclick="Asignar('${role.id}')"></button>
+                         </td>
+                         <td>${role.name}</td>
+                         <td class = "text-center">
+                                 <button class = "btn btn-warning bi bi-pencil-fill" href="#" onclick="Update('${role.id}')"></button>
+                         </td>
+                         <td class= "text-center">
+                                 <button class = "btn btn-danger bi bi-trash-fill" href="#" onclick="Delete('${role.id}')"></button>
+                         </td>
+                     </tr>
+                     `
+                    $('#tblRoles tbody').append(filas);
+                });
+
+            },
+            error: function (result) {
+                alert("Error al realizar la consulta a la BD" + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
+
+    function ShowModal() {
+        $("#txtIdRol").val("");
+        $("#txtNombre").val("");
+        $('#modal').modal('show');
+    };
+
+    function Guardar() {
+
+        var datos = new FormData(document.getElementById('FormularioRol'));
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Form")',
+            data: datos,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function (result) {
+                $('#modal').modal('hide');
+                alert('Operación realizada con exito. ');
+                GetAll();
+            },
+            error: function (result) {
+                alert('Error en la inserción' + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
+
+    function Update(id) {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetById")',
+            data: { idRol: id },
+            datatype: 'json',
+
+            success: function (result) {
+
+                $("#txtIdRol").val(result.object.roleId)
+                $("#txtNombre").val(result.object.name)
+
+                $('#modal').modal('show')
+
+            },
+            error: function (result) {
+                alert('Error en la consulta' + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
+
+    function Delete(id) {
+        if (confirm("¿Estas seguro de querer eliminar este Rol?")) {
+            $.ajax({
+                type: 'DELETE',
+                url: '@Url.Action("Delete")',
+                data: { idRole: id },
+                dataType: 'json',
+
+                success: function (result) {
+                    alert('Rol eliminado correctamete');
+                    GetAll();
+                },
+                error: function (result) {
+                    alert('El Rol no puede ser eliminado ya que usuarios tienen este rol asignado' + result.response.JSON.ErrorMessage);
+                }
+            });
+        }
+    }
+
+    function Asignar(id) {
+        $("#txtIdRolAsignar").val(id)
+        $.ajax({
+            type:'GET',
+            url: '@Url.Action("UsuariosGetAll")',
+            dataType:'json',
+            success: function(result){
+                $("#ddlUsuario").empty();
+                $("#ddlUsuario").append('<option value ="' + 0 + '">' + 'Seleccione un Usuario' + '</option>');
+                $.each(result.objects, function (i, usuario) {
+                    $("#ddlUsuario").append('<option value ="'
+                        + usuario.idUsuario + '">'
+                        + usuario.userName + '</option>');
+                });
+            }
+        });
+
+        $('#modalAsignar').modal('show')
+    };
+
+    function AsignarRol() {
+
+        var idUsuario = $('#ddlUsuario').val();
+        var idRol = $('#txtIdRolAsignar').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Asignar")',
+            data: { idUsuario: idUsuario, idRol: idRol },
+
+            success: function(result){
+
+                $("#modalAsignar").modal('hide');
+                alert("Rol Asignado correctamente a usuario");
+                GetAll();
+            },
+            error: function(result){
+                alert("Error en la asignación de Rol" + result.responseJSON.ErrorMessage);
+            }
+        })
+    }
+
+</script>
 
 

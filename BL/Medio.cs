@@ -195,7 +195,7 @@ namespace BL
                     media.CantidadDisponible = medio.CantidadDisponible.Value;
                     media.Imagen = medio.Imagen;
                     media.IdTipoMedio = medio.TipoMedio.IdTipoMedio;
-                    media.IdEditorial = medio.Editorial.IdEditorial;
+                    media.IdEditorial = (medio.Editorial.IdEditorial == 0)?null:medio.Editorial.IdEditorial;
                     media.IdIdioma = medio.Idioma.IdIdioma;
                     media.IdAutor = medio.Autor.IdAutor;
 
@@ -243,7 +243,7 @@ namespace BL
                         query.CantidadDisponible = medio.CantidadDisponible.Value;
                         query.Imagen = medio.Imagen;
                         query.IdTipoMedio = medio.TipoMedio.IdTipoMedio;
-                        query.IdEditorial = medio.Editorial.IdEditorial;
+                        query.IdEditorial = (medio.Editorial.IdEditorial == 0) ? null : medio.Editorial.IdEditorial;
                         query.IdIdioma = medio.Idioma.IdIdioma;
                         query.IdAutor = medio.Autor.IdAutor;
 
