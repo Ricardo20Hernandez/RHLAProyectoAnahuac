@@ -242,6 +242,7 @@
         $("#txtApellidoPaterno").val("");
         $('#txtApellidoMaterno').val("");
         $('#txtFechaNacimiento').val("");
+        $("#fuImagenUpdate").val(""),
         UpdateImage('https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg');
         var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
         $('#fuImagen').replaceWith(newInput);
@@ -315,13 +316,16 @@
 
     function GuardarAutor() {
 
+        var autor = null;
+
         var imagenNueva = $("#fuImagen")[0].files.length;
         if (!(imagenNueva === 0)) {
             $("#fuImagenUpdate").val("");
         }
 
         if ($("#fuImagenUpdate").val() != "") {
-            var autor = {
+
+            autor = {
                 "idAutor": Number($('#txtIdAutor').val()),
                 "nombre": $("#txtNombre").val(),
                 "apellidoPaterno": $("#txtApellidoPaterno").val(),
@@ -331,6 +335,12 @@
                 "autores": [
                     "string"
                 ]
+            }
+
+            if (autor.idAutor == 0) {
+                Add(autor);
+            } else {
+                Update(autor);
             }
         }
         else {
@@ -348,8 +358,7 @@
                 contentType: false,
                 success: function (fotobyte) {
 
-                    
-                    var autor = {
+                    autor = {
                         "idAutor": Number($('#txtIdAutor').val()),
                         "nombre": $("#txtNombre").val(),
                         "apellidoPaterno": $("#txtApellidoPaterno").val(),
@@ -360,21 +369,19 @@
                             "string"
                         ]
                     }
+
+                    if (autor.idAutor == 0) {
+                        Add(autor);
+                    } else {
+                        Update(autor);
+                    }
+
                 },
                 error: function (result) {
                     alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
                 }
-
             });
-
         }
-
-        if (autor.idAutor == 0) {
-            Add(autor);
-        } else {
-            Update(autor);
-        }
-
     }
 
     function Add(autor) {
@@ -422,6 +429,9 @@
     }
 
     function GetById(idAutor) {
+
+        var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
+        $('#fuImagen').replaceWith(newInput);
 
         $.ajax({
             type: 'GET',
