@@ -124,13 +124,14 @@
                                 {
                                     <img id="imgActor" src="data:image/png;base64,@Convert.ToBase64String(Model.Foto)" style="width:100px; height:100px;" />
                                 }
-                                @Html.HiddenFor(model => model.Foto)
+                                @* @Html.HiddenFor(model => model.Foto) *@
+                                <input type="text" id="fuImagenUpdate" name="fuImagenUpdate" class="visually-hidden" />
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-success" id="btnGuardar" onclick="Guardar()">Guardar</button>
+                        <button type="button" class="btn btn-success" id="btnGuardar" onclick="GuardarAutor()">Guardar</button>
                     </div>
                 </div>
             </div>
@@ -141,7 +142,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-5">
-            <div class="modal" id="myModal">
+            <div class="modal" id="modalAutor">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -204,7 +205,7 @@
 
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("AutorGetAll")',
+            url: 'http://localhost:5108/api/Autor/getall',
             success: function (result) {
                 $('#tblAutores tbody').empty();
 
@@ -219,7 +220,7 @@
                     var filas =
                         '<tr>'
                         + '<td class="text-center"> '
-                        + '<a class="btn btn-warning bi bi-pencil-fill" href="#" onclick="Update(' + autor.idAutor + ')">'
+                        + '<a class="btn btn-warning bi bi-pencil-fill" href="#" onclick="GetById(' + autor.idAutor + ')">'
                         + '</a> '
                         + '</td>'
                         + "<td id='id' class='text-center'>" + autor.nombre + ' ' + autor.apellidoPaterno + ' ' + autor.apellidoMaterno + "</td>"
@@ -312,5 +313,142 @@
         $('#imgActor').attr('src', imageUrl);
     }
 
+    function GuardarAutor() {
+
+        var imagenNueva = $("#fuImagen")[0].files.length;
+        if (!(imagenNueva === 0)) {
+            $("#fuImagenUpdate").val("");
+        }
+
+        if ($("#fuImagenUpdate").val() != "") {
+            var autor = {
+                "idAutor": Number($('#txtIdAutor').val()),
+                "nombre": $("#txtNombre").val(),
+                "apellidoPaterno": $("#txtApellidoPaterno").val(),
+                "apellidoMaterno": $("#txtApellidoMaterno").val(),
+                "fechaNacimiento": $('#txtFechaNacimiento').val(),
+                "foto": $("#fuImagenUpdate").val(),
+                "autores": [
+                    "string"
+                ]
+            }
+        }
+        else {
+
+            //var foto = document.forms['FormularioAutor'].elements['fuImagen'].value;
+            var foto = new FormData();
+            var files = $('#fuImagen')[0].files[0];
+            foto.append('fuImagen', files);
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:5108/api/Autor/convert',
+                data: foto,
+                processData: false,
+                contentType: false,
+                success: function (fotobyte) {
+
+                    
+                    var autor = {
+                        "idAutor": Number($('#txtIdAutor').val()),
+                        "nombre": $("#txtNombre").val(),
+                        "apellidoPaterno": $("#txtApellidoPaterno").val(),
+                        "apellidoMaterno": $("#txtApellidoMaterno").val(),
+                        "fechaNacimiento": $('#txtFechaNacimiento').val(),
+                        "foto": fotobyte,
+                        "autores": [
+                            "string"
+                        ]
+                    }
+                },
+                error: function (result) {
+                    alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
+                }
+
+            });
+
+        }
+
+        if (autor.idAutor == 0) {
+            Add(autor);
+        } else {
+            Update(autor);
+        }
+
+    }
+
+    function Add(autor) {
+
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: 'POST',
+            url: 'http://localhost:5108/api/Autor/add',
+            data: JSON.stringify(autor),
+            dataType: 'json',
+            success: function (result) {
+                $('#modalAutor').modal('show');
+                $('#modal').modal('hide');
+                GetAll();
+            },
+            error: function (result) {
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
+
+    function Update(autor){
+
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: 'PUT',
+            url: 'http://localhost:5108/api/Autor/update',
+            data: JSON.stringify(autor),
+            dataType: 'json',
+            success: function (result){
+                $('#modalAutor').modal('show');
+                $('#modal').modal('hide');
+                GetAll();
+            },
+            error: function (result) {
+                alert('Error en la actualizacion' + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
+
+    function GetById(idAutor) {
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:5108/api/Autor/' + idAutor,
+            success: function (result) {
+
+                $('#txtIdAutor').val(result.object.idAutor)
+                $('#txtNombre').val(result.object.nombre)
+                $('#txtApellidoPaterno').val(result.object.apellidoPaterno)
+                $('#txtApellidoMaterno').val(result.object.apellidoMaterno)
+                $('#txtFechaNacimiento').val(result.object.fechaNacimiento)
+                $('#fuImagenUpdate').val(result.object.foto)
+
+                if (result.object.foto == null) {
+                    UpdateImage('https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg');
+                } else {
+                    var imageUrl = 'data:image/png;base64,' + result.object.foto;
+                    UpdateImage(imageUrl);
+                }
+
+                $('#modal').modal('show');
+            },
+            error: function (result) {
+
+            }
+
+        });
+    }
 
 </script>
