@@ -37,7 +37,7 @@
     {
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-responsive table-bordered" id="myTable">
+                <table class="table table-responsive table-bordered" id="tablamedios">
                     <thead class="table-light">
                         <tr>
                             <th class="text-center">Obtener en Prestamo</th>
@@ -59,8 +59,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (ML.Medio medio in Model.Medio.Medios)
-                        {
+                      @*  @foreach (ML.Medio medio in Model.Medio.Medios) *@
+                       @* {
                             <tr>
                                 <td class="text-center"><a class="btn btn-warning bi bi-pencil" href="@Url.Action("GetAll2","Prestamo", new {IdMedio = medio.IdMedio})"></a></td>
                                 <td class="visually-hidden">@medio.IdMedio</td>
@@ -85,10 +85,10 @@
                                 <td class="visually-hidden">@medio.Idioma.IdIdioma</td>
                                 <td class="text-center">@medio.Idioma.Nombre</td>
                                 <td class="visually-hidden">@medio.Autor.IdAutor</td>
-                                <td class="text-center">@medio.Autor.Nombre</td>
+                    <td class="text-center">@medio.Autor.Nombre</td>*@
                                 @* <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>*@
-                            </tr>
-                        }
+                        @*   </tr>
+                    } *@
                     </tbody>
                 </table>
             </div>
@@ -100,3 +100,156 @@
         <div class="alert alert-danger" role="alert">@ViewBag.Mensaje</div>
     }
 
+
+    <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+                 @*     @Html.LabelFor(model => Model.UserIdentity.IdentityUsers != null)
+                    @if (Model.UserIdentity.IdentityUsers != null)
+                    {
+                        @Html.DropDownListFor(model => model.UserIdentity.IdUsuario, new SelectList(Model.UserIdentity.IdentityUsers, "IdUsuario", "UserName"), 
+                        "Selecciona un pais", new { @class = "form-control", @id = "ddlUsuarios" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.UserIdentity.IdUsuario, new SelectList(string.Empty, "IdUsuario", "UserName"), 
+                        "Selecciona un pais", htmlAttributes: new { @class = "form-control", @id = "ddlUsuarios" })
+                    } *@
+                   @* <div class="col-md-12">
+                        <label for="idMedio" class="visually-hidden">IdMedio</label>
+                        <input type="text" class="visually-hidden" id="txtIdMedio" name="id" />
+                    </div> *@
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select id="ddlPrestamo" class="form-control">
+
+                            
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            GetAll();
+        });
+
+        function GetAll() {
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PrestamoGetAll")',
+                success: function (mediosYUsuarios) {
+                    $('#tablamedios tbody').empty();
+
+                    $.each(mediosYUsuarios.medio.medios , function (i, medio) {
+
+                        var image;
+                        if (medio.imagen != null) {
+                            image = '<img id="imgUsuario" src = "data:image/png;base64,' + medio.imagen + '"width = "100" height = "100" />'
+                        }
+                        else {
+                            image = '<img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" id = "imgUsuario" width = "100" height = "100" />'
+                        }
+                        var filas =
+                            "<tr>"
+                            + '<td class = "text-center">'
+                            + '<a class = "btn btn-warning bi bi-pencil-fill" href="#" onclick="GetAll2(' + medio.idMedio + ')">'
+                            + '</a>'
+                            + '</td>'
+                            + '<td class="visually-hidden">' + medio.idMedio + '</td>'
+                            + '<td class="text-center">' + medio.titulo + '</td>'
+                            + '<td class="text-center">' + medio.numeroPaginas + '</td>'
+                            + '<td class="text-center">' + medio.duracion + '</td>'
+                            + '<td class="text-center">' + medio.cantidadDisponible + '</td>'
+                            +    '<td>' +
+
+                          image
+                            
+                               + '</td>'
+                           + '<td class="visually-hidden">' + medio.tipoMedio.idTipoMedio + '</td>'
+                           + '<td class="text-center">' + medio.tipoMedio.nombre + '</td>'
+                           + '<td class="visually-hidden">' + medio.editorial.idEditorial + '</td>'
+                           + '<td class="text-center">' + medio.editorial.nombre + '</td>'
+                           + '<td class="visually-hidden">' + medio.idioma.idIdioma + '</td>'
+                           + '<td class="text-center">' + medio.idioma.nombre + '</td>'
+                           + 'td class="visually-hidden">' + medio.autor.idAutor + '</td>'
+                           + '<td class="text-center">' + medio.autor.nombre + '</td>'
+
+
+                        $('#tablamedios tbody').append(filas);
+                       
+                    });
+                },
+                error: function (result) {
+                    alert('Error al realizar la consulta' + result.responseJSON.ErrorMessage)
+                }
+            });
+        };
+
+
+        function GetAll2(idMedio) {
+
+            // var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
+            // $('#fuImagen').replaceWith(newInput);
+            $("#txtIdUsuario").val()
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PrestamoGetAll2")',
+                data: { IdMedio: idMedio },
+                dataType: 'json',
+
+                success: function (mediosYUsuarios) {
+                    //$("#txtIdMedio").val(mediosYUsuarios.medios.idMedio);
+
+                    $("#ddlPrestamo").empty();
+                    $("#ddlPrestamo").append('<option value="' + 0 + '">' + 'Selecciona un usuario' + '</option>');
+                    $.each(mediosYUsuarios.userIdentity.identityUsers, function (i, usuario) {
+                        $("#ddlPrestamo").append('<option value="'
+                            + usuario.idUsuario + '">'
+                            + usuario.userName + '</option>');
+                    });
+
+                    $('#modal2').modal('show');
+                },
+                error: function (mediosYUsuarios) {
+                    alert('Error en la consulta.' + mediosYUsuarios.responseJSON.ErrorMessage);
+                }
+
+            });
+        }
+
+        function ShowModal() {
+
+            $("##txtIdMedio").val("");
+            //GetAllPaises();
+            $('#modal2').modal('show');
+        };
+
+
+
+
+    </script>

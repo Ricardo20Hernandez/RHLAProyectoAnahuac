@@ -283,6 +283,83 @@ namespace PL.Controllers
 
         }
 
+        //simulacion de servicio desde el controlador 
+
+        public IActionResult PrestamoGetAll()
+        {
+
+            ML.Medio medio = new ML.Medio();
+            // ML.UserIdentity userIdentity = new ML.UserIdentity();
+            ML.Result result = BL.Medio.GetAll();
+            //ML.Result result1 = BL.IdentityUser.GetAll();   
+            ML.MediosYUsuarios mediosYUsuarios = new ML.MediosYUsuarios();
+            mediosYUsuarios.UserIdentity = new ML.UserIdentity();
+            mediosYUsuarios.Medio = new ML.Medio();
+
+            // ML.Result result = BL.Prestamo.LibrosDisponibles(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (result.Correct)
+            {
+                medio.Medios = result.Objects;
+            }
+            else
+            {
+                ViewBag.Mensaje = "Sin medios registrados aún";
+            }
+            //if (result1.Correct)
+            //{
+            //   userIdentity.IdentityUsers = result1.Objects;
+            //}
+            //else
+            //{
+            //    ViewBag.Mensaje = "Sin medios registrados aún";
+            //}
+            //mediosYUsuarios.UserIdentity = userIdentity;
+            mediosYUsuarios.Medio = medio;
+
+            // HttpContext.Session.SetString("ID", mediosYUsuarios.UserIdentity.IdUsuario);
+            return Ok(mediosYUsuarios);
+
+            //ML.Result result = BL.Editorial.GetAll();
+
+            //if (result.Correct)
+            //{
+            //    return Ok(result);
+            //}
+            //else
+            //{
+            //    return BadRequest(result);
+            //}
+        }
+
+
+        public IActionResult PrestamoGetAll2(int idMedio)
+
+        {
+            ML.Result result1 = BL.IdentityUser.GetAll();
+            ML.UserIdentity userIdentity1 = new ML.UserIdentity();
+            //userIdentity1.IdentityUsers = result1.Objects;
+            ML.MediosYUsuarios mediosYUsuarios = new ML.MediosYUsuarios();
+            mediosYUsuarios.Medio = new ML.Medio();
+            mediosYUsuarios.Medio.IdMedio = idMedio;
+            mediosYUsuarios.UserIdentity = userIdentity1;
+            mediosYUsuarios.UserIdentity.IdentityUsers = result1.Objects;
+            return Ok(mediosYUsuarios);
+        }
+
+        public IActionResult UsuariosGetAll()
+        {
+            ML.Result result = BL.IdentityUser.GetAll();
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
         //devolver el prestamo 
 
 
