@@ -168,7 +168,7 @@
                                     @Html.DropDownListFor(model => model.Direccion.Colonia.IdColonia, new SelectList(string.Empty, "IdColonia", "Nombre"), "Selecciona una colonia", htmlAttributes: new { @class = "form-control", @id = "ddlColonia" })
                                 }
                             </div>
-                        </div>                      
+                        </div>
                         <div class="row">
                             <div class="col-md-12">
                                 @Html.LabelFor(model => model.Direccion.Calle)
@@ -190,12 +190,35 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-success" id="btnGuardar" onclick="Guardar()">Guardar</button>
+                        <button type="button" class="btn btn-success" id="btnGuardar" onclick="GuardarEditorial()">Guardar</button>
                     </div>
                 </div>
             </div>
         </div>
     }
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="modal" id="modalEditorial">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Detalle</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <h6>Accion Efectuada correctamete</h6>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -209,7 +232,7 @@
 
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("EditorialGetAll")',
+            url: 'http://localhost:5108/api/Editorial/getall',
             success: function (result) {
                 $('#tblEditoriales tbody').empty();
 
@@ -217,7 +240,7 @@
                     var filas =
                         "<tr>"
                         + '<td class = "text-center">'
-                        + '<a class = "btn btn-warning bi bi-pencil-fill" href="#" onclick="Update(' + editorial.idEditorial + ')">'
+                        + '<a class = "btn btn-warning bi bi-pencil-fill" href="#" onclick="GetById(' + editorial.idEditorial + ')">'
                         + '</a>'
                         + '</td>'
                         + '<td class="visually-hidden">' + editorial.idEditorial + '</td>'
@@ -249,13 +272,12 @@
             $("#ddlColonia").empty();
 
             $.ajax({
-                type: 'POST',
-                url: '@Url.Action("EstadoGetByIdPais")',
-                dataType: 'json',
+                type: 'GET',
+                url: 'http://localhost:5108/api/Editorial/estadogetbyidpais',
                 data: { IdPais: $("#ddlPais").val() },
-                success: function (estados) {
+                success: function (result) {
                     $("#ddlEstado").append('<option value="0">' + 'Seleccione un estado' + '</option>');
-                    $.each(estados, function (i, estados) {
+                    $.each(result.objects, function (i, estados) {
                         $("#ddlEstado").append('<option value="'
                             + estados.idEstado + '">'
                             + estados.nombre + '</option>');
@@ -279,13 +301,12 @@
             $("#ddlColonia").empty();
 
             $.ajax({
-                type: 'POST',
-                url: '@Url.Action("MunicipioGetByIdEstado")',
-                dataType: 'json',
+                type: 'GET',
+                url: 'http://localhost:5108/api/Editorial/municipiogetbyidestado',
                 data: { IdEstado: $("#ddlEstado").val() },
-                success: function (municipios) {
+                success: function (result) {
                     $("#ddlMunicipio").append('<option value="0">' + 'Seleccione un municipio' + '</option>');
-                    $.each(municipios, function (i, municipios) {
+                    $.each(result.objects, function (i, municipios) {
                         $("#ddlMunicipio").append('<option value="'
                             + municipios.idMunicipio + '">'
                             + municipios.nombre + '</option>');
@@ -308,13 +329,12 @@
             $("#ddlColonia").empty();
 
             $.ajax({
-                type: 'POST',
-                url: '@Url.Action("ColoniaGetByIdMunicipio")',
-                dataType: 'json',
+                type: 'GET',
+                url: 'http://localhost:5108/api/Editorial/coloniagetbyidmunicipio',
                 data: { IdMunicipio: $("#ddlMunicipio").val() },
-                success: function (colonias) {
+                success: function (result) {
                     $("#ddlColonia").append('<option value="0">' + 'Seleccione una colonia' + '</option>');
-                    $.each(colonias, function (i, colonias) {
+                    $.each(result.objects, function (i, colonias) {
                         $("#ddlColonia").append('<option value="'
                             + colonias.idColonia + '">'
                             + colonias.nombre + '</option>');
@@ -327,7 +347,7 @@
         });
     });
 
-    function ShowModal(){
+    function ShowModal() {
 
         $("#txtIdEditorial").val("");
         $("#txtNombre").val("");
@@ -341,14 +361,14 @@
         $('#modal').modal('show');
     };
 
-    function GetAllPaises(){
+    function GetAllPaises() {
         $("#ddlPais").empty();
         $("#ddlEstado").empty();
         $("#ddlMunicipio").empty();
         $("#ddlColonia").empty();
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("PaisGetAll")',
+            url: 'http://localhost:5108/api/Editorial/paisgetall',
             success: function (result) {
                 $("#ddlPais").append('<option value="' + 0 + '">' + 'Selecciona un pais' + '</option>');
                 $.each(result.objects, function (i, pais) {
@@ -360,93 +380,162 @@
         });
     };
 
-    function Guardar(){
+    function GuardarEditorial() {
 
-        var datos = new FormData(document.getElementById('FormularioEditorial'));
+        var editorial =
+        {
+            "idEditorial": Number($('#txtIdEditorial').val()),
+            "nombre": $('#txtNombre').val(),
+            "telefono": $('#txtTelefono').val(),
+            "email": $('#txtEmail').val(),
+            "editoriales": [
+                "string"
+            ],
+            "direccion": {
+                "idDireccion": Number($('#txtIdDireccion').val()),
+                "calle": $('#txtCalle').val(),
+                "numeroInterior": $('#txtNumeroInterior').val(),
+                "numeroExterior": $('#txtNumeroExterior').val(),
+                "colonia": {
+                    "idColonia": $('#ddlColonia').val(),
+                    "nombre": "string",
+                    "codigoPostal": "string",
+                    "municipio": {
+                        "idMunicipio": $('#ddlMunicipio').val(),
+                        "nombre": "string",
+                        "estado": {
+                            "idEstado": $('#ddlEstado').val(),
+                            "nombre": "string",
+                            "pais": {
+                                "idPais": $('#ddlPais').val(),
+                                "nombre": "string",
+                                "paises": [
+                                    "string"
+                                ]
+                            },
+                            "estados": [
+                                "string"
+                            ]
+                        },
+                        "municipios": [
+                            "string"
+                        ]
+                    },
+                    "colonias": [
+                        "string"
+                    ]
+                }
+            }
+        }
+
+        if (editorial.idEditorial == 0) {
+            Add(editorial);
+        } else {
+            Update(editorial)
+        }
+    }
+
+    function Add(editorial) {
 
         $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
             type: 'POST',
-            url: '@Url.Action("Form")',
-            data: datos,
-            processData: false,
-            contentType: false,
-            datatýpe: 'json',
+            url: 'http://localhost:5108/api/Editorial/add',
+            data: JSON.stringify(editorial),
             success: function (result) {
-                // $('#myModal').modal('show');
+                $('#modalEditorial').modal('show');
                 $('#modal').modal('hide');
-                alert('Preceso realizado con exito.');
                 GetAll();
             },
             error: function (result) {
-                alert('Error en inserción.' + result.responseJSON.ErrorMessage);
+                alert('Error en la inserción ' + result.responseJSON.ErrorMessage);
             }
-
         });
+    }
 
-    };
+    function Update(editorial) {
 
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: 'PUT',
+            url: 'http://localhost:5108/api/Editorial/update',
+            data: JSON.stringify(editorial),
+            success: function (result) {
+                $('#modalEditorial').modal('show');
+                $('#modal').modal('hide');
+                GetAll();
+            },
+            error: function (result) {
+                alert('Error en la inserción ' + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
 
-    function Update(idEditorial) {
+    function GetById(idEditorial) {
+
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("GetById")',
+            url: 'http://localhost:5108/api/Editorial/getbyid',
             data: { IdEditorial: idEditorial },
-            dataType: 'json',
 
-            success: function (result) {
+            success: function (resultGetById) {
 
-                $("#txtIdEditorial").val(result.object.idEditorial);
-                $("#txtNombre").val(result.object.nombre);
-                $("#txtTelefono").val(result.object.telefono);
-                $("#txtEmail").val(result.object.email);
-                $("#txtIdDireccion").val(result.object.direccion.idDireccion);
-                $('#ddlPais').val(result.object.direccion.colonia.municipio.estado.pais.idPais);
+                $("#txtIdEditorial").val(resultGetById.object.idEditorial);
+                $("#txtNombre").val(resultGetById.object.nombre);
+                $("#txtTelefono").val(resultGetById.object.telefono);
+                $("#txtEmail").val(resultGetById.object.email);
+                $("#txtIdDireccion").val(resultGetById.object.direccion.idDireccion);
+                $("#ddlPais").val(resultGetById.object.direccion.colonia.municipio.estado.pais.idPais);
                 $("#ddlEstado").empty();
                 $("#ddlMunicipio").empty();
                 $("#ddlColonia").empty();
 
                 $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("EstadoGetByIdPais")',
-                    dataType: 'json',
+                    type: 'GET',
+                    url: 'http://localhost:5108/api/Editorial/estadogetbyidpais',
                     data: { IdPais: $("#ddlPais").val() },
-                    success: function (estados) {
+                    success: function (result) {
                         $("#ddlEstado").append('<option value="0">' + 'Seleccione un Estado' + '</option>');
-                        $.each(estados, function (i, estados) {
+                        $.each(result.objects, function (i, estados) {
                             $("#ddlEstado").append('<option value ="'
                                 + estados.idEstado + '">'
                                 + estados.nombre + '</option>');
                         });
-                        $('#ddlEstado').val(result.object.direccion.colonia.municipio.estado.idEstado);
+                        $("#ddlEstado").val(resultGetById.object.direccion.colonia.municipio.estado.idEstado);
 
                         $.ajax({
-                            type: 'POST',
-                            url: '@Url.Action("MunicipioGetByIdEstado")',
-                            dataType: 'json',
+                            type: 'GET',
+                            url: 'http://localhost:5108/api/Editorial/municipiogetbyidestado',
                             data: { IdEstado: $("#ddlEstado").val() },
-                            success: function (municipios) {
+                            success: function (result) {
                                 $("#ddlMunicipio").append('<option value="0">' + 'Seleccione un Municipio' + '</option>');
-                                $.each(municipios, function (i, municipios) {
+                                $.each(result.objects, function (i, municipios) {
                                     $("#ddlMunicipio").append('<option value ="'
                                         + municipios.idMunicipio + '">'
                                         + municipios.nombre + '</option>');
                                 });
 
-                                $('#ddlMunicipio').val(result.object.direccion.colonia.municipio.idMunicipio);
+                                $("#ddlMunicipio").val(resultGetById.object.direccion.colonia.municipio.idMunicipio);
+
                                 $.ajax({
-                                    type: 'POST',
-                                    url: '@Url.Action("ColoniaGetByIdMunicipio")',
-                                    dataType: 'json',
+                                    type: 'GET',
+                                    url: 'http://localhost:5108/api/Editorial/coloniagetbyidmunicipio',
                                     data: { IdMunicipio: $("#ddlMunicipio").val() },
-                                    success: function (colonias) {
+                                    success: function (result) {
                                         $("#ddlColonia").append('<option value="0">' + 'Seleccione una Colonia' + '</option>');
-                                        $.each(colonias, function (i, colonias) {
+                                        $.each(result.objects, function (i, colonias) {
                                             $("#ddlColonia").append('<option value ="'
                                                 + colonias.idColonia + '">'
                                                 + colonias.nombre + '</option>');
                                         });
 
-                                        $('#ddlColonia').val(result.object.direccion.colonia.idColonia);
+                                        $('#ddlColonia').val(resultGetById.object.direccion.colonia.idColonia);
                                     },
                                     error: function (ex) {
                                         alert('Failed. ' + ex)
@@ -463,16 +552,130 @@
                     }
                 });
 
-                $("#txtCalle").val(result.object.direccion.calle);
-                $("#txtNumeroInterior").val(result.object.direccion.numeroInterior);
-                $("#txtNumeroExterior").val(result.object.direccion.numeroExterior);              
+                $("#txtCalle").val(resultGetById.object.direccion.calle);
+                $("#txtNumeroInterior").val(resultGetById.object.direccion.numeroInterior);
+                $("#txtNumeroExterior").val(resultGetById.object.direccion.numeroExterior);
                 $('#modal').modal('show');
             },
-            error: function (result) {
-                alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
+            error: function (resultGetById) {
+                alert('Error en la consulta' + result.responseJSON.ErrorMessage);
             }
-
         });
     };
+
+    // function Guardar() {
+
+    //     var datos = new FormData(document.getElementById('FormularioEditorial'));
+
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '@Url.Action("Form")',
+    //         data: datos,
+    //         processData: false,
+    //         contentType: false,
+    //         datatýpe: 'json',
+    //         success: function (result) {
+    //             $('#myModal').modal('show');
+    //             $('#modal').modal('hide');
+    //             alert('Preceso realizado con exito.');
+    //             GetAll();
+    //         },
+    //         error: function (result) {
+    //             alert('Error en inserción.' + result.responseJSON.ErrorMessage);
+    //         }
+
+    //     });
+
+    // };
+
+
+    // function Update(idEditorial) {
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: '@Url.Action("GetById")',
+    //         data: { IdEditorial: idEditorial },
+    //         dataType: 'json',
+
+    //         success: function (result) {
+
+    //             $("#txtIdEditorial").val(result.object.idEditorial);
+    //             $("#txtNombre").val(result.object.nombre);
+    //             $("#txtTelefono").val(result.object.telefono);
+    //             $("#txtEmail").val(result.object.email);
+    //             $("#txtIdDireccion").val(result.object.direccion.idDireccion);
+    //             $('#ddlPais').val(result.object.direccion.colonia.municipio.estado.pais.idPais);
+    //             $("#ddlEstado").empty();
+    //             $("#ddlMunicipio").empty();
+    //             $("#ddlColonia").empty();
+
+    //             $.ajax({
+    //                 type: 'POST',
+    //                 url: '@Url.Action("EstadoGetByIdPais")',
+    //                 dataType: 'json',
+    //                 data: { IdPais: $("#ddlPais").val() },
+    //                 success: function (estados) {
+    //                     $("#ddlEstado").append('<option value="0">' + 'Seleccione un Estado' + '</option>');
+    //                     $.each(estados, function (i, estados) {
+    //                         $("#ddlEstado").append('<option value ="'
+    //                             + estados.idEstado + '">'
+    //                             + estados.nombre + '</option>');
+    //                     });
+    //                     $('#ddlEstado').val(result.object.direccion.colonia.municipio.estado.idEstado);
+
+    //                     $.ajax({
+    //                         type: 'POST',
+    //                         url: '@Url.Action("MunicipioGetByIdEstado")',
+    //                         dataType: 'json',
+    //                         data: { IdEstado: $("#ddlEstado").val() },
+    //                         success: function (municipios) {
+    //                             $("#ddlMunicipio").append('<option value="0">' + 'Seleccione un Municipio' + '</option>');
+    //                             $.each(municipios, function (i, municipios) {
+    //                                 $("#ddlMunicipio").append('<option value ="'
+    //                                     + municipios.idMunicipio + '">'
+    //                                     + municipios.nombre + '</option>');
+    //                             });
+
+    //                             $('#ddlMunicipio').val(result.object.direccion.colonia.municipio.idMunicipio);
+    //                             $.ajax({
+    //                                 type: 'POST',
+    //                                 url: '@Url.Action("ColoniaGetByIdMunicipio")',
+    //                                 dataType: 'json',
+    //                                 data: { IdMunicipio: $("#ddlMunicipio").val() },
+    //                                 success: function (colonias) {
+    //                                     $("#ddlColonia").append('<option value="0">' + 'Seleccione una Colonia' + '</option>');
+    //                                     $.each(colonias, function (i, colonias) {
+    //                                         $("#ddlColonia").append('<option value ="'
+    //                                             + colonias.idColonia + '">'
+    //                                             + colonias.nombre + '</option>');
+    //                                     });
+
+    //                                     $('#ddlColonia').val(result.object.direccion.colonia.idColonia);
+    //                                 },
+    //                                 error: function (ex) {
+    //                                     alert('Failed. ' + ex)
+    //                                 }
+    //                             });
+    //                         },
+    //                         error: function (ex) {
+    //                             alert('Failed. ' + ex)
+    //                         }
+    //                     });
+    //                 },
+    //                 error: function (ex) {
+    //                     alert('Failed. ' + ex)
+    //                 }
+    //             });
+
+    //             $("#txtCalle").val(result.object.direccion.calle);
+    //             $("#txtNumeroInterior").val(result.object.direccion.numeroInterior);
+    //             $("#txtNumeroExterior").val(result.object.direccion.numeroExterior);
+    //             $('#modal').modal('show');
+    //         },
+    //         error: function (result) {
+    //             alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
+    //         }
+
+    //     });
+    // };
 </script>
 
