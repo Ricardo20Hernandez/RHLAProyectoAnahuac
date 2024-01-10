@@ -19,17 +19,22 @@
         </div>*@
 
         
-        <div class="col-md-2 ms-auto">
+      @*   <div class="col-md-2 ms-auto">
             <a class="btn btn-success" asp-action="GetAll3" asp-controller="Prestamo">Medios en prestamo usuarios en general</a>
             <br />
-        </div>
-    
-
-    
+        </div> *@
         <div class="col-md-2 ms-auto">
+        <button type="button" class="btn btn-primary" onclick="GetAll3()">Medios en prestamo usuarios en general</button>
+        </div>
+
+        <div class="col-md-2 ms-auto">
+            <button type="button" class="btn btn-primary" onclick="GetAll4()">Devolver Medios</button>
+        </div>
+
+      @*   <div class="col-md-2 ms-auto">
             <a class="btn btn-success" asp-action="GetAll4" asp-controller="Prestamo">Devolver Prestamo</a>
             <br />
-        </div>
+        </div> *@
     </div>
  
     <br />
@@ -109,53 +114,447 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div>
+                </div>   
+                <form class="form" action="prototipo.html" method="post">
                 <div class="modal-body">
+                  
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="txtIdMedio" class="visually-hidden">txtIdMedio</label>
+                            <input type="text" class="visually-hidden" id="txtIdMedio" name="id" />
+                        </div>
+                    </div>
                  
-                 @*     @Html.LabelFor(model => Model.UserIdentity.IdentityUsers != null)
-                    @if (Model.UserIdentity.IdentityUsers != null)
-                    {
-                        @Html.DropDownListFor(model => model.UserIdentity.IdUsuario, new SelectList(Model.UserIdentity.IdentityUsers, "IdUsuario", "UserName"), 
-                        "Selecciona un pais", new { @class = "form-control", @id = "ddlUsuarios" })
-                    }
-                    else
-                    {
-                        @Html.DropDownListFor(model => model.UserIdentity.IdUsuario, new SelectList(string.Empty, "IdUsuario", "UserName"), 
-                        "Selecciona un pais", htmlAttributes: new { @class = "form-control", @id = "ddlUsuarios" })
-                    } *@
-                   @* <div class="col-md-12">
-                        <label for="idMedio" class="visually-hidden">IdMedio</label>
-                        <input type="text" class="visually-hidden" id="txtIdMedio" name="id" />
-                    </div> *@
-
                     <div class="row">
                         <div class="col-md-12">
                             <select id="ddlPrestamo" class="form-control">
 
                             
                             </select>
+
+                    
                         </div>
                     </div>
 
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CerrarModal2()">Cancelar</button>
+                    <button type="button" class="btn btn-primary"  onclick="SacarEnPrestamo()">Sacar en prestamo</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
-    
 
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="form" action="prototipo.html" method="post">
+                    <div class="modal-body">
+
+                   @*      <div class="row">
+                            <div class="col-md-12">
+                                <label for="txtIdMedio2" class="visually-hidden">txtIdMedio</label>
+                                <input type="text" class="visually-hidden" id="txtIdMedio2" name="id" />
+                            </div>
+                        </div> *@
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <select id="ddlPrestamo2" class="form-control">
+                                </select>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CerrarModal3()">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="VerMediosPrestados()">Ver libros prestados</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="Libros Prestados" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="form" action="prototipo.html" method="post">
+                    <div class="modal-body">
+
+                        @*      <div class="row">
+                        <div class="col-md-12">
+                        <label for="txtIdMedio2" class="visually-hidden">txtIdMedio</label>
+                        <input type="text" class="visually-hidden" id="txtIdMedio2" name="id" />
+                        </div>
+                        </div> *@
+
+                    @*     <div class="row">
+                            <div class="col-md-12">
+                                <select id="ddlPrestamo2" class="form-control">
+                                </select>
+
+
+                            </div>
+                        </div> *@
+
+                        <div class="col-md-12">
+                            <table class="table table-responsive table-bordered" id="tablaPrestados">
+                                <thead class="table-light">
+                                    <tr>
+                                        @* <th class="text-center">Regresar</th> *@
+                                        <th class="visually-hidden">IdMedio</th>
+                                        <th class="text-center">Titulo</th>
+
+                                        <th class="text-center">Portada</th>
+                                        <th class="visually-hidden">IdTipoMedio</th>
+                                        <th class="text-center">Medio</th>
+
+                                        <th class="visually-hidden">IdAutor</th>
+                                        <th class="text-center">Autor</th>
+                                        @*<th class="text-center">Eliminar</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  @*  @foreach (ML.DetallePrestamo detallePrestamo in Model.DetallePrestamos)
+                                    {
+                                        <tr>
+                                            <td class="text-center"><a class="btn btn-success bi bi-pencil" href="@Url.Action("Devolver","Prestamo", new {IdMedio = detallePrestamo.Prestamo.Medio.IdMedio , Id = detallePrestamo.Prestamo.Id})"></a></td>
+                                            <td class="visually-hidden">@detallePrestamo.Prestamo.IdPrestamo</td>
+                                            <td class="visually-hidden">@detallePrestamo.Prestamo.Id</td>
+
+                                            <td class="text-center">@detallePrestamo.Prestamo.Medio.Titulo</td>
+
+                                            <td class="text-center">
+                                                @if (@detallePrestamo.Prestamo.Medio.Imagen == null)
+                                                {
+                                                    <img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" style="height:100px; width:100px" />
+                                                }
+                                                else
+                                                {
+                                                    <img id="imgMedio" src="data:img/png;base64,@Convert.ToBase64String(@detallePrestamo.Prestamo.Medio.Imagen)" style="height:100px; width:100px;" />
+                                                }
+                                            </td>
+                                            <td class="visually-hidden">@detallePrestamo.Prestamo.Medio.TipoMedio.IdTipoMedio</td>
+                                            <td class="text-center">@detallePrestamo.Prestamo.Medio.TipoMedio.Nombre</td>
+
+                                            <td class="visually-hidden">@detallePrestamo.Prestamo.Medio.Autor.IdAutor</td>
+                                            <td class="text-center">@detallePrestamo.Prestamo.Medio.Autor.Nombre</td>
+                                            @* <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>*@
+                                @* </tr>*@
+                                @* }*@
+                                 </tbody> 
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CerrarModal4()">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="VerMediosPrestados()">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="form" action="prototipo.html" method="post">
+                    <div class="modal-body">
+
+                        @*      <div class="row">
+                        <div class="col-md-12">
+                        <label for="txtIdMedio2" class="visually-hidden">txtIdMedio</label>
+                        <input type="text" class="visually-hidden" id="txtIdMedio2" name="id" />
+                        </div>
+                        </div> *@
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <select id="ddlPrestamo4" class="form-control">
+                                </select>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CerrarModal5()">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="VerMediosPrestadosDevolver()">Devolver libros</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="Libros Prestados" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="form" action="prototipo.html" method="post">
+                    <div class="modal-body">
+
+                        @*      <div class="row">
+                        <div class="col-md-12">
+                        <label for="txtIdMedio2" class="visually-hidden">txtIdMedio</label>
+                        <input type="text" class="visually-hidden" id="txtIdMedio2" name="id" />
+                        </div>
+                        </div> *@
+
+                        @*     <div class="row">
+                        <div class="col-md-12">
+                        <select id="ddlPrestamo2" class="form-control">
+                        </select>
+
+
+                        </div>
+                        </div> *@
+
+                        <div class="col-md-12">
+                            <table class="table table-responsive table-bordered" id="tablaPrestados2">
+                                <thead class="table-light">
+                                    <tr>
+                                         <th class="text-center">Devolver</th> 
+                                        <th class="visually-hidden">IdMedio</th>
+                                        <th class="text-center">Titulo</th>
+
+                                        <th class="text-center">Portada</th>
+                                        <th class="visually-hidden">IdTipoMedio</th>
+                                        <th class="text-center">Medio</th>
+
+                                        <th class="visually-hidden">IdAutor</th>
+                                        <th class="text-center">Autor</th>
+                                        @*<th class="text-center">Eliminar</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @*  @foreach (ML.DetallePrestamo detallePrestamo in Model.DetallePrestamos)
+                                    {
+                                    <tr>
+                                    <td class="text-center"><a class="btn btn-success bi bi-pencil" href="@Url.Action("Devolver","Prestamo", new {IdMedio = detallePrestamo.Prestamo.Medio.IdMedio , Id = detallePrestamo.Prestamo.Id})"></a></td>
+                                    <td class="visually-hidden">@detallePrestamo.Prestamo.IdPrestamo</td>
+                                    <td class="visually-hidden">@detallePrestamo.Prestamo.Id</td>
+
+                                    <td class="text-center">@detallePrestamo.Prestamo.Medio.Titulo</td>
+
+                                    <td class="text-center">
+                                    @if (@detallePrestamo.Prestamo.Medio.Imagen == null)
+                                    {
+                                    <img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" style="height:100px; width:100px" />
+                                    }
+                                    else
+                                    {
+                                    <img id="imgMedio" src="data:img/png;base64,@Convert.ToBase64String(@detallePrestamo.Prestamo.Medio.Imagen)" style="height:100px; width:100px;" />
+                                    }
+                                    </td>
+                                    <td class="visually-hidden">@detallePrestamo.Prestamo.Medio.TipoMedio.IdTipoMedio</td>
+                                    <td class="text-center">@detallePrestamo.Prestamo.Medio.TipoMedio.Nombre</td>
+
+                                    <td class="visually-hidden">@detallePrestamo.Prestamo.Medio.Autor.IdAutor</td>
+                                    <td class="text-center">@detallePrestamo.Prestamo.Medio.Autor.Nombre</td>
+                                    @* <td class="text-center"><a class="btn btn-danger bi bi-trash3-fill" href="@Url.Action("Delete","Medio", new{IdMedio = medio.IdMedio})" onclick="return confirm('¿Estas seguro de eliminar este Medio?');"></a></td>*@
+                                    @* </tr>*@
+                                    @* }*@
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CerrarModal6()">Volver</button>
+                        <button type="button" class="btn btn-primary" onclick="VerMediosPrestados()">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+   
+
+ </div>  
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <script type="text/javascript">
 
         $(document).ready(function () {
             GetAll();
         });
+
+
+        //asi recuperamos los valores del formulario
+
+        // function SacarEnPrestamo() {
+        //     let dato = document.getElementById('ddlPrestamo').value;
+        //     alert(dato);
+        // }
+
+        // function SacarEnPrestamo() {
+
+        //   //  var datos = new FormData(document.getElementById('FormularioEditorial'));
+        //    // var idMedio = $("#txtIdMedio").val()
+        //     var idUsuario = $("#ddlPrestamo").val()
+
+        //     //var jsonInput = { IdMedio: idMedio, IdUsuario: idUsuario };
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: '@Url.Action("SacarEnPrestamoAjax")',
+        //         data: { "IdUsuario": idUsuario },
+        //         processData: false,
+        //         contentType: false,
+        //         datatype: 'json',
+        //         success: function (result) {
+        //             // $('#myModal').modal('show');
+        //             $('#modal').modal('hide');
+        //             alert('Preceso realizado con exito.');
+        //             GetAll();
+        //         },
+        //         error: function (result) {
+        //             alert('Error en inserción.' + result.responseJSON.ErrorMessage);
+        //         }
+
+        //     });
+
+        // };
+
+        function SacarEnPrestamo() {
+            var prestamoEntrada = {
+                idMedio: $("#txtIdMedio").val(),
+                idUsuario: $("#ddlPrestamo").val(),
+                //phone: $("#id-phone").val()
+            }
+
+            $('#target').html('sending..');
+
+            $.ajax({
+                url: '@Url.Action("SacarEnPrestamoAjax")',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(prestamoEntrada),
+                success: function (data) {
+                    $('#target').html(data.msg);
+                     alert('El medio fue sacado en prestamo correctamente');
+                },
+                
+            });
+        }
+
+
+    function DevolverElPrestamo(idMedio) {
+        var prestamoEntrada = {
+            idMedio: idMedio,
+            idUsuario: $("#ddlPrestamo4").val(),
+            //phone: $("#id-phone").val()
+        }
+
+        $('#target').html('sending..');
+
+        $.ajax({
+            url: '@Url.Action("DevolverElPrestamoAjax")',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(prestamoEntrada),
+            success: function (data) {
+                $('#target').html(data.msg);
+            },
+
+        });
+    }
+
+
+
+
+        function VerMediosPrestados() {
+            var prestamoEntrada = {
+                idMedio: 0,
+                idUsuario: $("#ddlPrestamo2").val(),
+                //phone: $("#id-phone").val()
+            }
+
+            $('#target').html('sending..');
+
+            $.ajax({
+                url: '@Url.Action("MediosPrestadosAjax")',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(prestamoEntrada),
+                success: function (medios) {
+                    $('#modal4').modal('show');
+                    $('#tablaPrestados tbody').empty();
+                    $.each(medios.detallePrestamos, function (i, detallePrestamo) {
+
+                        var image;
+                        if (detallePrestamo.prestamo.medio.imagen != null) {
+                            image = '<img id="imgUsuario" src = "data:image/png;base64,' + detallePrestamo.prestamo.medio.imagen + '"width = "100" height = "100" />'
+                        }
+                        else {
+                            image = '<img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" id = "imgUsuario" width = "100" height = "100" />'
+                        }
+                        var filas =
+                            '<tr>'
+                           
+                            + '<td class="visually-hidden">' + detallePrestamo.prestamo.medio.idMedio + '</td>'
+                            + '<td class="text-center">' + detallePrestamo.prestamo.medio.titulo + '</td>'
+                             +
+
+                            image
+
+                            + '</td>'
+                            + '<td class="visually-hidden">' + detallePrestamo.prestamo.medio.tipoMedio.idTipoMedio + '</td>'
+                            + '<td class="text-center">' + detallePrestamo.prestamo.medio.tipoMedio.nombre + '</td>'
+                         
+                            + 'td class="visually-hidden">' + detallePrestamo.prestamo.medio.autor.idAutor + '</td>'
+                            + '<td class="text-center">' + detallePrestamo.prestamo.medio.autor.nombre + '</td>'
+
+                            + '</tr>'
+                        $('#tablaPrestados tbody').append(filas);
+
+                    });
+                    alert('prueba');
+                },
+
+            });
+        }
+
+
 
         function GetAll() {
 
@@ -175,7 +574,7 @@
                             image = '<img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" id = "imgUsuario" width = "100" height = "100" />'
                         }
                         var filas =
-                            "<tr>"
+                            '<tr>'
                             + '<td class = "text-center">'
                             + '<a class = "btn btn-warning bi bi-pencil-fill" href="#" onclick="GetAll2(' + medio.idMedio + ')">'
                             + '</a>'
@@ -196,10 +595,10 @@
                            + '<td class="text-center">' + medio.editorial.nombre + '</td>'
                            + '<td class="visually-hidden">' + medio.idioma.idIdioma + '</td>'
                            + '<td class="text-center">' + medio.idioma.nombre + '</td>'
-                           + 'td class="visually-hidden">' + medio.autor.idAutor + '</td>'
+                           + '<td class="visually-hidden">' + medio.autor.idAutor + '</td>'
                            + '<td class="text-center">' + medio.autor.nombre + '</td>'
 
-
+                            + '</tr>'
                         $('#tablamedios tbody').append(filas);
                        
                     });
@@ -223,7 +622,7 @@
                 dataType: 'json',
 
                 success: function (mediosYUsuarios) {
-                    //$("#txtIdMedio").val(mediosYUsuarios.medios.idMedio);
+                    $("#txtIdMedio").val(idMedio);
 
                     $("#ddlPrestamo").empty();
                     $("#ddlPrestamo").append('<option value="' + 0 + '">' + 'Selecciona un usuario' + '</option>');
@@ -241,6 +640,149 @@
 
             });
         }
+
+
+
+        function GetAll3() {
+
+            // var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
+            // $('#fuImagen').replaceWith(newInput);
+            $("#txtIdUsuario").val()
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PrestamoGetAll3")',
+                //data: { IdMedio: idMedio },
+                dataType: 'json',
+
+                success: function (mediosYUsuarios) {
+                  //  $("#txtIdMedio").val(idMedio);
+
+                    $("#ddlPrestamo2").empty();
+                    $("#ddlPrestamo2").append('<option value="' + 0 + '">' + 'Selecciona un usuario' + '</option>');
+                    $.each(mediosYUsuarios.userIdentity.identityUsers, function (i, usuario) {
+                        $("#ddlPrestamo2").append('<option value="'
+                            + usuario.idUsuario + '">'
+                            + usuario.userName + '</option>');
+                    });
+
+                    $('#modal3').modal('show');
+                },
+                error: function (mediosYUsuarios) {
+                    alert('Error en la consulta.' + mediosYUsuarios.responseJSON.ErrorMessage);
+                }
+
+            });
+        }
+
+
+        function GetAll4() {
+
+            // var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
+            // $('#fuImagen').replaceWith(newInput);
+            $("#txtIdUsuario").val()
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PrestamoGetAll4")',
+                //data: { IdMedio: idMedio },
+                dataType: 'json',
+
+                success: function (mediosYUsuarios) {
+                    //  $("#txtIdMedio").val(idMedio);
+
+                    $("#ddlPrestamo4").empty();
+                    $("#ddlPrestamo4").append('<option value="' + 0 + '">' + 'Selecciona un usuario' + '</option>');
+                    $.each(mediosYUsuarios.userIdentity.identityUsers, function (i, usuario) {
+                        $("#ddlPrestamo4").append('<option value="'
+                            + usuario.idUsuario + '">'
+                            + usuario.userName + '</option>');
+                    });
+
+                    $('#modal5').modal('show');
+                },
+                error: function (mediosYUsuarios) {
+                    alert('Error en la consulta.' + mediosYUsuarios.responseJSON.ErrorMessage);
+                }
+
+            });
+        }
+
+
+    function VerMediosPrestadosDevolver() {
+        var prestamoEntrada = {
+            idMedio: 0,
+            idUsuario: $("#ddlPrestamo4").val(),
+            //phone: $("#id-phone").val()
+        }
+
+        $('#target').html('sending..');
+
+        $.ajax({
+            url: '@Url.Action("MediosPrestadosDevolverAjax")',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(prestamoEntrada),
+            success: function (medios) {
+                $('#modal6').modal('show');
+                $('#tablaPrestados2 tbody').empty();
+                $.each(medios.detallePrestamos, function (i, detallePrestamo) {
+
+                    var image;
+                    if (detallePrestamo.prestamo.medio.imagen != null) {
+                        image = '<img id="imgUsuario" src = "data:image/png;base64,' + detallePrestamo.prestamo.medio.imagen + '"width = "100" height = "100" />'
+                    }
+                    else {
+                        image = '<img src="https://static.vecteezy.com/system/resources/previews/023/985/139/non_2x/school-materials-clip-art-cartoon-books-free-png.png" id = "imgUsuario" width = "100" height = "100" />'
+                    }
+                    var filas =
+                        '<tr>'
+                        + '<td class = "text-center">'
+                        + '<a class = "btn btn-warning bi bi-pencil-fill" href="#" onclick="DevolverElPrestamo(' + detallePrestamo.prestamo.medio.idMedio + ')">'
+                        + '</a>'
+
+                        + '<td class="visually-hidden">' + detallePrestamo.prestamo.medio.idMedio + '</td>'
+                        + '<td class="text-center">' + detallePrestamo.prestamo.medio.titulo + '</td>'
+                  
+                        +    '<td>' +
+                        image
+
+                        + '</td>'
+                        + '<td class="visually-hidden">' + detallePrestamo.prestamo.medio.tipoMedio.idTipoMedio + '</td>'
+                        + '<td class="text-center">' + detallePrestamo.prestamo.medio.tipoMedio.nombre + '</td>'
+
+                        + '<td class="visually-hidden">' + detallePrestamo.prestamo.medio.autor.idAutor + '</td>'
+                        + '<td class="text-center">' + detallePrestamo.prestamo.medio.autor.nombre + '</td>'
+
+                        + '</tr>'
+                    $('#tablaPrestados2 tbody').append(filas);
+
+                });
+                alert('prueba');
+            },
+
+        });
+    }
+
+        function CerrarModal() {
+            $("#modal").modal("hide");
+        };
+
+         function CerrarModal2() {
+            $("#modal2").modal("hide");
+        };
+         function CerrarModal3() {
+            $("#modal3").modal("hide");
+        };
+         function CerrarModal4() {
+            $("#modal4").modal("hide");
+        };
+         function CerrarModal5() {
+            $("#modal5").modal("hide");
+        };
+         function CerrarModal6() {
+            $("#modal6").modal("hide");
+        };
+
 
         function ShowModal() {
 
