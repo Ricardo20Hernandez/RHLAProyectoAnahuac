@@ -250,64 +250,64 @@
     };
 
 
-    function Guardar() {
+    // function Guardar() {
 
-        var datos = new FormData(document.getElementById('FormularioAutor'));
+    //     var datos = new FormData(document.getElementById('FormularioAutor'));
 
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("Form")',
-            data: datos,
-            processData: false,
-            contentType: false,
-            datatýpe: 'json',
-            success: function (result) {
-                // $('#myModal').modal('show');
-                $('#modal').modal('hide');
-                alert('Preceso realizado con exito.');
-                GetAll();
-            },
-            error: function (result) {
-                alert('Error en inserción.' + result.responseJSON.ErrorMessage);
-            }
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '@Url.Action("Form")',
+    //         data: datos,
+    //         processData: false,
+    //         contentType: false,
+    //         datatýpe: 'json',
+    //         success: function (result) {
+    //             // $('#myModal').modal('show');
+    //             $('#modal').modal('hide');
+    //             alert('Preceso realizado con exito.');
+    //             GetAll();
+    //         },
+    //         error: function (result) {
+    //             alert('Error en inserción.' + result.responseJSON.ErrorMessage);
+    //         }
 
-        });
-    };
+    //     });
+    // };
 
-    function Update(idAutor) {
+    // function Update(idAutor) {
 
-        var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
-        $('#fuImagen').replaceWith(newInput);
+    //     var newInput = $("<input type='file' id='fuImagen' name='fuImagen'' class='form-control' onchange='PreviewImagen(event)' />")
+    //     $('#fuImagen').replaceWith(newInput);
 
-        $.ajax({
-            type: 'GET',
-            url: '@Url.Action("GetById")',
-            data: { IdAutor: idAutor },
-            dataType: 'json',
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: '@Url.Action("GetById")',
+    //         data: { IdAutor: idAutor },
+    //         dataType: 'json',
 
-            success: function (result) {
+    //         success: function (result) {
 
-                $('#txtIdAutor').val(result.object.idAutor)
-                $('#txtNombre').val(result.object.nombre)
-                $('#txtApellidoPaterno').val(result.object.apellidoPaterno)
-                $('#txtApellidoMaterno').val(result.object.apellidoMaterno)
-                $('#txtFechaNacimiento').val(result.object.fechaNacimiento)
+    //             $('#txtIdAutor').val(result.object.idAutor)
+    //             $('#txtNombre').val(result.object.nombre)
+    //             $('#txtApellidoPaterno').val(result.object.apellidoPaterno)
+    //             $('#txtApellidoMaterno').val(result.object.apellidoMaterno)
+    //             $('#txtFechaNacimiento').val(result.object.fechaNacimiento)
 
-                if (result.object.foto == null) {
-                    UpdateImage('https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg');
-                } else {
-                    var imageUrl = 'data:image/png;base64,' + result.object.foto;
-                    UpdateImage(imageUrl);
-                }
+    //             if (result.object.foto == null) {
+    //                 UpdateImage('https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg');
+    //             } else {
+    //                 var imageUrl = 'data:image/png;base64,' + result.object.foto;
+    //                 UpdateImage(imageUrl);
+    //             }
 
-                $('#modal').modal('show');
-            },
-            error: function (result) {
-                alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
-            }
+    //             $('#modal').modal('show');
+    //         },
+    //         error: function (result) {
+    //             alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
+    //         }
 
-        });
-    }
+    //     });
+    // }
 
     function UpdateImage(imageUrl) {
         // Reemplaza la imagen por la nueva URL proporcionada
